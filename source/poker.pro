@@ -14,5 +14,6 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+DESTDIR = ../target
 
 SOURCES += main.cpp
