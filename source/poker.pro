@@ -16,4 +16,8 @@ TEMPLATE = app
 
 DESTDIR = ../target
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    engine/card.cpp
+
+HEADERS += \
+    engine/card.h
