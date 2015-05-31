@@ -1,26 +1,5 @@
-/*
-OOPoker
-
-Copyright (c) 2010 Lode Vandevenne
-All rights reserved.
-
-This file is part of OOPoker.
-
-OOPoker is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-OOPoker is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with OOPoker.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#pragma once
+#ifndef POKERMATH_H
+#define POKERMATH_H
 
 /*
 This source file contains various more complex mathematical poker functions.
@@ -40,8 +19,12 @@ bool isSuited(const Card& card1, const Card& card2);
 bool isConnector(const Card& card1, const Card& card2);
 
 //pre-flop card rating: Group or EV
-int getSklanskyMalmuthGroup(const Card& card1, const Card& card2); //gives a score (1-9) for starting hands, based on value and whether they're suited. Lower is better.
-double getRealPlayStatisticsEV(const Card& card1, const Card& card2); //Card Expected Value statistics from http://www.pokerroom.com/
+
+//gives a score (1-9) for starting hands, based on value and whether they're suited. Lower is better.
+int getSklanskyMalmuthGroup(const Card& card1, const Card& card2);
+
+//Card Expected Value statistics from http://www.pokerroom.com/
+double getRealPlayStatisticsEV(const Card& card1, const Card& card2);
 
 void splitIntoSuits(std::vector<Card>& spades
                   , std::vector<Card>& diamonds
@@ -51,9 +34,6 @@ void splitIntoSuits(std::vector<Card>& spades
 
 //does NOT reset the integers to 0 first, make sure you initialize them to 0!
 void getAmountPerSuit(int& clubs, int& diamonds, int& hearts, int& spades, const std::vector<Card>& cards);
-
-//this function is neither efficient, nor ever used by me so far. It's a naive combination checking function.
-void getHighestNearFlush(std::vector<Card>& result, const std::vector<Card>& cards);
 
 /*
 The getPotEquity returns a value in the range 0.0-1.0 representing roughly how much win chance you have to win the pot,
@@ -116,34 +96,6 @@ int eval7_index(const Card& card);
 ComboType eval7_category(int result); //converts result from eval to named combo type (without info about card values)
 
 /*
-Similar to eval7 but for 5 cards. Note: integer values related to eval7 and evan7index are NOT
-interchangeable with those of eval5!
-*/
-int eval5(const int* cards /*NOT card.getIndex()!!!*/);
-int eval5_index(const Card& card);
-ComboType eval5_category(int result); //converts result from eval to named combo type (without info about card values)
-
-/*
-Similar to eval5 and eval7, but for 6 cards, e.g. to calculate what combination you already have
-after the turn before the river. This function is called "slow" because it uses 6 calls to eval5.
-It's still a lot faster than the naive (but more convenient) implementation in combination.h
-*/
-int eval6_slow(const int* cards /*NOT card.getIndex()!!!*/);
-int eval6_index_slow(const Card& card);
-ComboType eval6_category(int result); //converts result from eval to named combo type (without info about card values)
-
-/*
-similar to eval5 and eval7, but meant for Omaha Hold'm.
-This implementation is included just for future reference. It's slow and not needed since OOPoker is currently
-exclusively Texas Hold'm.
-It evaluates the best 5-card combination out of 9 cards, where 2 must come from the first 4, 3 must come from the last 5.
-It's at least 60 times slower than eval7.
-*/
-int eval4_2_5_3_slow(const int* cards);
-int eval4_2_5_3_slow_index(const Card& card);
-ComboType eval4_2_5_3_slow_category(int result); //converts result from eval to named combo type (without info about card values)
-
-/*
 Get win chance functions for Texas Hold'm.
 
 They return the chance to win, tie or lose, as values in range 0.0-1.0.
@@ -199,3 +151,4 @@ void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
                                , int numOpponents, int numSamples = 50000);
 
+#endif // POKERMATH_H

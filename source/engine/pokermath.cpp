@@ -1,32 +1,12 @@
-/*
-OOPoker
-
-Copyright (c) 2010 Lode Vandevenne
-All rights reserved.
-
-This file is part of OOPoker.
-
-OOPoker is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-OOPoker is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with OOPoker.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include "pokermath.h"
 
-#include "combination.h"
-#include "pokereval.h"
-#include "pokereval2.h"
-#include "random.h"
+#include <cstdlib>
 
+#include "pokereval.h"
+
+int getRandomFast(int low, int high){
+    return rand() % (high - low + 1) + low;
+}
 
 double factorial(int i)
 {
@@ -238,15 +218,7 @@ void getHighestNearFlush(std::vector<Card>& result, const std::vector<Card>& car
   else result = clubs;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -448,13 +420,7 @@ void getWinChanceAgainst1AtRiver(double& win, double& tie, double& lose
   lose = (double)losses / count;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -752,88 +718,17 @@ void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-
-#if 0
-
-//slow
-
-int eval7(const int* cards)
-{
-  static bool inited = false;
-  if(!inited) { PokerEval::InitTheEvaluator(); inited = true; }
-  return PokerEval::GetHandValue(cards);
-}
-
-int eval7_index(const Card& card)
-{
-  /*
-  PokerEval expects per-rank ordering, not per-suit.
-
-  2c = 1 2d = 2 2h = 3 2s = 4 3c = 5 3d = 6 3h = 7 3s = 8 4c = 9 4d = 10 4h = 11 4s = 12 5c = 13 5d = 14 5h = 15 5s = 16 6c = 17 6d = 18 6h = 19 6s = 20 7c = 21 7d = 22 7h = 23 7s = 24 8c = 25 8d = 26 8h = 27 8s = 28 9c = 29 9d = 30 9h = 31 9s = 32 Tc = 33 Td = 34 Th = 35 Ts = 36 Jc = 37 Jd = 38 Jh = 39 Js = 40 Qc = 41 Qd = 42 Qh = 43 Qs = 44 Kc = 45 Kd = 46 Kh = 47 Ks = 48 Ac = 49 Ad = 50 Ah = 51 As = 52
-  */
-  int v = (card.value - 2) * 4;
-  int s = (int)card.suit + 1;
-  return s + v;
-}
-
-ComboType eval7_category(int result)
-{
-  int handCategory =  result >> 12;
-  //int rankWithinCategory = result & 0x00000FFF;
-
-  return (ComboType)(handCategory - 1); //handCategory is 1 for high card, 2 for pair, etc...
-}
-
-#elif 0
-
-//slowest
-
-int eval7(const int* cards)
-{
-  return 7462 - PokerEval::eval_7hand(cards); //subtracted from highest possible value, because higher is better in my case.
-}
-
-int eval7_index(const Card& card)
-{
-  static bool inited = false;
-  static int deck[52];
-  if(!inited)
-  {
-    PokerEval::init_deck(deck);
-    inited = true;
-  }
-
-  int value = card.value + 13 * (int)card.suit - 2;
-
-  return deck[value];
-}
-
-ComboType eval7_category(int result)
-{
-  return eval5_category(result);
-}
-
-#else
-
 //fast
 
 int eval7(const int* cards)
 {
   static bool inited = false;
-  if(!inited) { PokerEval2::InitializeHandRankingTables(); inited = true; }
+  if(!inited) { PokerEval::InitializeHandRankingTables(); inited = true; }
 
-  return (int)PokerEval2::RankHand( PokerEval2::HandMasksTable[cards[0]] | PokerEval2::HandMasksTable[cards[1]] |
-                                    PokerEval2::HandMasksTable[cards[2]] | PokerEval2::HandMasksTable[cards[3]] |
-                                    PokerEval2::HandMasksTable[cards[4]] | PokerEval2::HandMasksTable[cards[5]] |
-                                    PokerEval2::HandMasksTable[cards[6]] );
+  return (int)PokerEval::RankHand( PokerEval::HandMasksTable[cards[0]] | PokerEval::HandMasksTable[cards[1]] |
+                                    PokerEval::HandMasksTable[cards[2]] | PokerEval::HandMasksTable[cards[3]] |
+                                    PokerEval::HandMasksTable[cards[4]] | PokerEval::HandMasksTable[cards[5]] |
+                                    PokerEval::HandMasksTable[cards[6]] );
 }
 
 int eval7_index(const Card& card)
@@ -850,131 +745,6 @@ ComboType eval7_category(int result)
   return (ComboType)(result >> 20);
 }
 
-#endif
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-int eval5(const int* cards)
-{
-  return 7462 - PokerEval::eval_5hand(cards); //subtracted from highest possible value, because higher is better in my case.
-}
-
-int eval5_index(const Card& card)
-{
-  static bool inited = false;
-  static int deck[52];
-  if(!inited)
-  {
-    PokerEval::init_deck(deck);
-    inited = true;
-  }
-
-  int value = card.value + 13 * (int)card.suit - 2;
-
-  return deck[value];
-}
-
-ComboType eval5_category(int result)
-{
-    if      (result < 1277) return C_HIGH_CARD;
-    else if (result < 4137) return C_PAIR;
-    else if (result < 4995) return C_TWO_PAIR;
-    else if (result < 5853) return C_THREE_OF_A_KIND;
-    else if (result < 5863) return C_STRAIGHT;
-    else if (result < 7140) return C_FLUSH;
-    else if (result < 7296) return C_FULL_HOUSE;
-    else if (result < 7452) return C_FOUR_OF_A_KIND;
-    else                    return C_STRAIGHT_FLUSH;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-int eval6_slow(const int* cards)
-{
-  int cards_perm[10] = {cards[0], cards[1], cards[2], cards[3], cards[4], cards[5], cards[0], cards[1], cards[2], cards[3]};
-  int result = -1;
-  int val;
-
-  val = eval5(&cards_perm[0]);
-  if(val > result) result = val;
-  val = eval5(&cards_perm[1]);
-  if(val > result) result = val;
-  val = eval5(&cards_perm[2]);
-  if(val > result) result = val;
-  val = eval5(&cards_perm[3]);
-  if(val > result) result = val;
-  val = eval5(&cards_perm[4]);
-  if(val > result) result = val;
-  val = eval5(&cards_perm[5]);
-  if(val > result) result = val;
-
-  return result;
-}
-
-int eval6_slow_index(const Card& card)
-{
-  return eval5_index(card);
-}
-
-ComboType eval6_category(int result)
-{
-  return eval5_category(result);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-int eval4_2_5_3_slow(const int* cards)
-{
-  //This is for Omaha Hold'm
-
-  //6 possible permutations of 2 out of 4 hand cards
-  static const int perm4_1[6] = { 0, 1, 2, 3, 0, 1 };
-  static const int perm4_2[6] = { 1, 2, 3, 0, 2, 3 };
-  //10 possible permutations of 3 out of 5 community cards
-  static const int perm5_1[10] = { 4+2,4+0,4+0,4+0,4+1, 4+0,4+1,4+0,4+1,4+0 };
-  static const int perm5_2[10] = { 4+3,4+3,4+1,4+1,4+2, 4+1,4+2,4+2,4+3,4+2 };
-  static const int perm5_3[10] = { 4+4,4+4,4+4,4+2,4+3, 4+3,4+4,4+3,4+4,4+4 };
-
-  int cards5[5];
-
-  int result = -1;
-
-  for(size_t j = 0; j < 10; j++)
-  {
-    cards5[0] = cards[perm5_1[j]];
-    cards5[1] = cards[perm5_2[j]];
-    cards5[2] = cards[perm5_3[j]];
-    for(size_t i = 0; i < 6; i++)
-    {
-      cards5[3] = cards[perm4_1[i]];
-      cards5[4] = cards[perm4_2[i]];
-
-      int val = eval5(cards5);
-      if(val > result) result = val;
-    }
-  }
-
-  return result;
-}
-
-int eval4_2_5_3_slow_index(const Card& card)
-{
-  return eval5_index(card);
-}
-
-ComboType eval4_2_5_3_slow_category(int result)
-{
-  return eval5_category(result);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 double getPotEquity(const std::vector<Card>& holeCards, const std::vector<Card>& boardCards, int numOpponents, int numSamples)

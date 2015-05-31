@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
-
-QT       -= gui
+QT       -= core gui
 
 TARGET = game
 CONFIG   += console c++11
@@ -14,10 +12,16 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-DESTDIR = ../target
+DESTDIR = ./game/target
 
 SOURCES += main.cpp \
-    engine/card.cpp
+    engine/card.cpp \
+    engine/pokermath.cpp \
+    engine/combination.cpp \
+    engine/pokereval.cpp
 
 HEADERS += \
-    engine/card.h
+    engine/card.h \
+    engine/pokermath.h \
+    engine/combination.h \
+    engine/pokereval.h
