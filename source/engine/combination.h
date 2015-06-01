@@ -25,22 +25,22 @@ millions of hands per second.
 
 enum ComboType
 {
-  C_HIGH_CARD,
-  C_PAIR,
-  C_TWO_PAIR,
-  C_THREE_OF_A_KIND,
-  C_STRAIGHT,
-  C_FLUSH,
-  C_FULL_HOUSE,
-  C_FOUR_OF_A_KIND,
-  C_STRAIGHT_FLUSH //includes royal flush
+    C_HIGH_CARD,
+    C_PAIR,
+    C_TWO_PAIR,
+    C_THREE_OF_A_KIND,
+    C_STRAIGHT,
+    C_FLUSH,
+    C_FULL_HOUSE,
+    C_FOUR_OF_A_KIND,
+    C_STRAIGHT_FLUSH //includes royal flush
 };
 
 struct Combination
 {
-  ComboType type;
+    ComboType type;
 
-  /*
+    /*
   the cards are the 5 cards involved in this combo, and they are sorted in the following order (depending on the type of combo):
   Straight Flush: highest to lowest (Royal Flush: ace to 10)
   Four of a kind: first the 4 cards of the same value, then the 5th card (color order unspecified)
@@ -52,12 +52,12 @@ struct Combination
   Pair: first the 2, then the other 3 sorted from highest to lowest
   High card: highest to lowest
   */
-  Card cards[5];
-  int cards_used; //this is normally 5, unless the combo was made out of less cards (e.g. three of a kind detected given 3 cards)
+    Card cards[5];
+    int cards_used; //this is normally 5, unless the combo was made out of less cards (e.g. three of a kind detected given 3 cards)
 
-  std::string getName() const;
-  std::string getNameWithAllCards() const;
-  std::string getNameWithAllCardsPrintable() const;
+    std::string getName() const;
+    std::string getNameWithAllCards() const;
+    std::string getNameWithAllCardsPrintable() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -130,43 +130,43 @@ void getCombo(Combination& combo, const Card& card1, const Card& card2, const Ca
 
 //2 cards given by short names
 void getCombo(Combination& combo
-            , const std::string& card1
-            , const std::string& card2);
+              , const std::string& card1
+              , const std::string& card2);
 //3 cards given by short names
 void getCombo(Combination& combo
-            , const std::string& card1
-            , const std::string& card2
-            , const std::string& card3);
+              , const std::string& card1
+              , const std::string& card2
+              , const std::string& card3);
 //4 cards given by short names
 void getCombo(Combination& combo
-            , const std::string& card1
-            , const std::string& card2
-            , const std::string& card3
-            , const std::string& card4);
+              , const std::string& card1
+              , const std::string& card2
+              , const std::string& card3
+              , const std::string& card4);
 //5 cards given by short names
 void getCombo(Combination& combo
-            , const std::string& card1
-            , const std::string& card2
-            , const std::string& card3
-            , const std::string& card4
-            , const std::string& card5);
+              , const std::string& card1
+              , const std::string& card2
+              , const std::string& card3
+              , const std::string& card4
+              , const std::string& card5);
 //6 cards given by short names
 void getCombo(Combination& combo
-            , const std::string& card1
-            , const std::string& card2
-            , const std::string& card3
-            , const std::string& card4
-            , const std::string& card5
-            , const std::string& card6);
+              , const std::string& card1
+              , const std::string& card2
+              , const std::string& card3
+              , const std::string& card4
+              , const std::string& card5
+              , const std::string& card6);
 //7 cards given by short names
 void getCombo(Combination& combo
-            , const std::string& card1
-            , const std::string& card2
-            , const std::string& card3
-            , const std::string& card4
-            , const std::string& card5
-            , const std::string& card6
-            , const std::string& card7);
+              , const std::string& card1
+              , const std::string& card2
+              , const std::string& card3
+              , const std::string& card4
+              , const std::string& card5
+              , const std::string& card6
+              , const std::string& card7);
 //string.size() / 2 cards given by short names combined in one string
 void getCombo(Combination& combo, const std::string& cards);
 

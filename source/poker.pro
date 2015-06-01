@@ -18,10 +18,16 @@ SOURCES += main.cpp \
     engine/card.cpp \
     engine/pokermath.cpp \
     engine/combination.cpp \
-    engine/pokereval.cpp
+    engine/pokereval.cpp \
+    ai/ai.cpp \
+    engine/player.cpp \
+    engine/game.cpp
 
 HEADERS += \
     engine/card.h \
     engine/pokermath.h \
     engine/combination.h \
-    engine/pokereval.h
+    engine/pokereval.h \
+    ai/ai.h \
+    engine/player.h \
+    engine/game.h

@@ -10,63 +10,63 @@ int getRandomFast(int low, int high){
 
 double factorial(int i)
 {
-  double result = 1.0;
-  for(int j = 1; j <= i; j++)
-  {
-    result *= j;
-  }
-  return result;
+    double result = 1.0;
+    for(int j = 1; j <= i; j++)
+    {
+        result *= j;
+    }
+    return result;
 }
 
 double combination(int n, int p)
 {
-/*
+    /*
 Notation ascii art representation:
  ( n )
  ( p )
 */
 
-  if(p > n / 2)
-  {
-    p = n - p; //take advantage of symmetry
-  }
+    if(p > n / 2)
+    {
+        p = n - p; //take advantage of symmetry
+    }
 
-  double result = 1;
-  for(int i = 1; i <= p; i++)
-  {
-    result *= (n - p + i) / i;
-  }
+    double result = 1;
+    for(int i = 1; i <= p; i++)
+    {
+        result *= (n - p + i) / i;
+    }
 
-  return result;
+    return result;
 }
 
 
 
 bool isPair(const Card& card1, const Card& card2)
 {
-  return card1.value == card2.value;
+    return card1.value == card2.value;
 }
 
 bool isSuited(const Card& card1, const Card& card2)
 {
-  return card1.suit == card2.suit;
+    return card1.suit == card2.suit;
 }
 
 bool isConnector(const Card& card1, const Card& card2)
 {
-  int value1 = card1.value;
-  int value2 = card2.value;
-  if(value2 > value1) std::swap(value1, value2);
+    int value1 = card1.value;
+    int value2 = card2.value;
+    if(value2 > value1) std::swap(value1, value2);
 
-  if(value1 == 14 && value2 == 2) return true; //ace-two
-  if(value1 - value2 == 1) return true;
+    if(value1 == 14 && value2 == 2) return true; //ace-two
+    if(value1 - value2 == 1) return true;
 
-  return false;
+    return false;
 }
 
 int getSklanskyMalmuthGroup(const Card& card1, const Card& card2)
 {
-  /*
+    /*
   From Wikipedia:
 
   Texas hold 'em hand groups
@@ -79,46 +79,46 @@ int getSklanskyMalmuthGroup(const Card& card1, const Card& card2)
   diagonal and those for pairs of the same suit above.
   */
 
-  if(!card1.isValid() || !card2.isValid()) return 9;
+    if(!card1.isValid() || !card2.isValid()) return 9;
 
-  static const int table[169] =
-//    A  K  Q  J  T  9  8  7  6  5  4  3  2
-{
-/*A*/ 1, 1, 2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-/*K*/ 2, 1, 2, 3, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-/*Q*/ 3, 4, 1, 3, 4, 5, 7, 9, 9, 9, 9, 9, 9, //<suited
-/*J*/ 4, 5, 5, 1, 3, 4, 6, 8, 9, 9, 9, 9, 9,
-/*T*/ 6, 6, 6, 5, 2, 4, 5, 7, 9, 9, 9, 9, 9,
-/*9*/ 8, 8, 8, 7, 7, 3, 4, 5, 8, 9, 9, 9, 9,
-/*8*/ 9, 9, 9, 8, 8, 7, 4, 5, 6, 8, 9, 9, 9,
-/*7*/ 9, 9, 9, 9, 9, 9, 8, 5, 5, 6, 8, 9, 9,
-/*6*/ 9, 9, 9, 9, 9, 9, 9, 8, 5, 6, 7, 9, 9,
-/*5*/ 9, 9, 9, 9, 9, 9, 9, 9, 8, 6, 6, 7, 9,
-/*4*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 7, 8,
-/*3*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 8,
-/*2*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7
+    static const int table[169] =
+            //    A  K  Q  J  T  9  8  7  6  5  4  3  2
+    {
+            /*A*/ 1, 1, 2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+            /*K*/ 2, 1, 2, 3, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+            /*Q*/ 3, 4, 1, 3, 4, 5, 7, 9, 9, 9, 9, 9, 9, //<suited
+            /*J*/ 4, 5, 5, 1, 3, 4, 6, 8, 9, 9, 9, 9, 9,
+            /*T*/ 6, 6, 6, 5, 2, 4, 5, 7, 9, 9, 9, 9, 9,
+            /*9*/ 8, 8, 8, 7, 7, 3, 4, 5, 8, 9, 9, 9, 9,
+            /*8*/ 9, 9, 9, 8, 8, 7, 4, 5, 6, 8, 9, 9, 9,
+            /*7*/ 9, 9, 9, 9, 9, 9, 8, 5, 5, 6, 8, 9, 9,
+            /*6*/ 9, 9, 9, 9, 9, 9, 9, 8, 5, 6, 7, 9, 9,
+            /*5*/ 9, 9, 9, 9, 9, 9, 9, 9, 8, 6, 6, 7, 9,
+            /*4*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 7, 8,
+            /*3*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 8,
+            /*2*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7
 };      //^offsuit
 
-  size_t index1 = 14 - card1.value;
-  size_t index2 = 14 - card2.value;
+    size_t index1 = 14 - card1.value;
+    size_t index2 = 14 - card2.value;
 
-  if(card1.suit == card2.suit)
-  {
-    //use upper triangle of table, so second index higher than first index
-    if(index1 > index2) return table[13 * index2 + index1];
-    else return table[13 * index1 + index2];
-  }
-  else
-  {
-    //use lower triangle of table, so second index higher than first index
-    if(index1 > index2) return table[13 * index1 + index2];
-    else return table[13 * index2 + index1];
-  }
+    if(card1.suit == card2.suit)
+    {
+        //use upper triangle of table, so second index higher than first index
+        if(index1 > index2) return table[13 * index2 + index1];
+        else return table[13 * index1 + index2];
+    }
+    else
+    {
+        //use lower triangle of table, so second index higher than first index
+        if(index1 > index2) return table[13 * index1 + index2];
+        else return table[13 * index2 + index1];
+    }
 }
 
 double getRealPlayStatisticsEV(const Card& card1, const Card& card2)
 {
-  /*
+    /*
   Statistics based on real play with their associated actual value in real bets.
 
   Source: http://www.pokerroom.com/poker/poker-school/ev-stats/total-stats-by-card/
@@ -130,92 +130,92 @@ double getRealPlayStatisticsEV(const Card& card1, const Card& card2)
   Copyright (c) PokerRoom.com Established 1999
   */
 
-  if(!card1.isValid() || !card2.isValid()) return 9;
+    if(!card1.isValid() || !card2.isValid()) return 9;
 
-  static const double table[169] =
-//    A     K     Q     J     T     9     8     7     6     5     4     3     2
-{
-/*A*/ 2.32, 0.77, 0.59, 0.43, 0.33, 0.18, 0.10, 0.08, 0.03, 0.08, 0.06, 0.02, 0.00,
-/*K*/ 0.51, 1.67, 0.39, 0.29, 0.20, 0.09, 0.01, 0.00,-0.04,-0.05,-0.05,-0.08,-0.08,
-/*Q*/ 0.31, 0.16, 1.22, 0.23, 0.17, 0.06,-0.02,-0.06,-0.08,-0.09,-0.10,-0.11,-0.12,
-/*J*/ 0.19, 0.07, 0.03, 0.86, 0.15, 0.04,-0.03,-0.07,-0.11,-0.11,-0.11,-0.13,-0.14,
-/*T*/ 0.08, 0.01,-0.02,-0.03, 0.58, 0.05, 0.00,-0.05,-0.11,-0.12,-0.13,-0.13,-0.14,
-/*9*/-0.03,-0.07,-0.08,-0.08,-0.08, 0.38, 0.00,-0.04,-0.09,-0.12,-0.15,-0.14,-0.14,
-/*8*/-0.07,-0.11,-0.11,-0.10,-0.09,-0.10, 0.25,-0.02,-0.07,-0.11,-0.13,-0.15,-0.14,
-/*7*/-0.10,-0.11,-0.12,-0.12,-0.10,-0.10,-0.12, 0.16,-0.03,-0.09,-0.11,-0.14,-0.15,
-/*6*/-0.12,-0.12,-0.13,-0.12,-0.11,-0.12,-0.11,-0.11, 0.07,-0.07,-0.09,-0.11,-0.14,
-/*5*/-0.12,-0.13,-0.13,-0.13,-0.12,-0.12,-0.11,-0.11,-0.12, 0.02,-0.08,-0.11,-0.14,
-/*4*/-0.12,-0.13,-0.13,-0.13,-0.12,-0.12,-0.12,-0.12,-0.12,-0.13,-0.03,-0.13,-0.14,
-/*3*/-0.13,-0.08,-0.13,-0.13,-0.12,-0.12,-0.12,-0.12,-0.12,-0.12,-0.13,-0.07,-0.16,
-/*2*/-0.15,-0.14,-0.13,-0.13,-0.12,-0.12,-0.12,-0.12,-0.12,-0.12,-0.12,-0.14,-0.09,
+    static const double table[169] =
+            //    A     K     Q     J     T     9     8     7     6     5     4     3     2
+    {
+            /*A*/ 2.32, 0.77, 0.59, 0.43, 0.33, 0.18, 0.10, 0.08, 0.03, 0.08, 0.06, 0.02, 0.00,
+            /*K*/ 0.51, 1.67, 0.39, 0.29, 0.20, 0.09, 0.01, 0.00,-0.04,-0.05,-0.05,-0.08,-0.08,
+            /*Q*/ 0.31, 0.16, 1.22, 0.23, 0.17, 0.06,-0.02,-0.06,-0.08,-0.09,-0.10,-0.11,-0.12,
+            /*J*/ 0.19, 0.07, 0.03, 0.86, 0.15, 0.04,-0.03,-0.07,-0.11,-0.11,-0.11,-0.13,-0.14,
+            /*T*/ 0.08, 0.01,-0.02,-0.03, 0.58, 0.05, 0.00,-0.05,-0.11,-0.12,-0.13,-0.13,-0.14,
+            /*9*/-0.03,-0.07,-0.08,-0.08,-0.08, 0.38, 0.00,-0.04,-0.09,-0.12,-0.15,-0.14,-0.14,
+            /*8*/-0.07,-0.11,-0.11,-0.10,-0.09,-0.10, 0.25,-0.02,-0.07,-0.11,-0.13,-0.15,-0.14,
+            /*7*/-0.10,-0.11,-0.12,-0.12,-0.10,-0.10,-0.12, 0.16,-0.03,-0.09,-0.11,-0.14,-0.15,
+            /*6*/-0.12,-0.12,-0.13,-0.12,-0.11,-0.12,-0.11,-0.11, 0.07,-0.07,-0.09,-0.11,-0.14,
+            /*5*/-0.12,-0.13,-0.13,-0.13,-0.12,-0.12,-0.11,-0.11,-0.12, 0.02,-0.08,-0.11,-0.14,
+            /*4*/-0.12,-0.13,-0.13,-0.13,-0.12,-0.12,-0.12,-0.12,-0.12,-0.13,-0.03,-0.13,-0.14,
+            /*3*/-0.13,-0.08,-0.13,-0.13,-0.12,-0.12,-0.12,-0.12,-0.12,-0.12,-0.13,-0.07,-0.16,
+            /*2*/-0.15,-0.14,-0.13,-0.13,-0.12,-0.12,-0.12,-0.12,-0.12,-0.12,-0.12,-0.14,-0.09,
 };      //^offsuit
 
-  size_t index1 = 14 - card1.value;
-  size_t index2 = 14 - card2.value;
+    size_t index1 = 14 - card1.value;
+    size_t index2 = 14 - card2.value;
 
-  if(card1.suit == card2.suit)
-  {
-    //use upper triangle of table, so second index higher than first index
-    if(index1 > index2) return table[13 * index2 + index1];
-    else return table[13 * index1 + index2];
-  }
-  else
-  {
-    //use lower triangle of table, so second index higher than first index
-    if(index1 > index2) return table[13 * index1 + index2];
-    else return table[13 * index2 + index1];
-  }
+    if(card1.suit == card2.suit)
+    {
+        //use upper triangle of table, so second index higher than first index
+        if(index1 > index2) return table[13 * index2 + index1];
+        else return table[13 * index1 + index2];
+    }
+    else
+    {
+        //use lower triangle of table, so second index higher than first index
+        if(index1 > index2) return table[13 * index1 + index2];
+        else return table[13 * index2 + index1];
+    }
 }
 
 void splitIntoSuits(std::vector<Card>& spades
-                  , std::vector<Card>& diamonds
-                  , std::vector<Card>& hearts
-                  , std::vector<Card>& clubs
-                  , const std::vector<Card>& cards)
+                    , std::vector<Card>& diamonds
+                    , std::vector<Card>& hearts
+                    , std::vector<Card>& clubs
+                    , const std::vector<Card>& cards)
 {
-  for(size_t i = 0; i < cards.size(); i++)
-  {
-    Suit suit = cards[i].getSuit();
-    if(suit == S_SPADES) spades.push_back(cards[i]);
-    else if(suit == S_DIAMONDS) diamonds.push_back(cards[i]);
-    else if(suit == S_HEARTS) hearts.push_back(cards[i]);
-    else if(suit == S_CLUBS) clubs.push_back(cards[i]);
-  }
+    for(size_t i = 0; i < cards.size(); i++)
+    {
+        Suit suit = cards[i].getSuit();
+        if(suit == S_SPADES) spades.push_back(cards[i]);
+        else if(suit == S_DIAMONDS) diamonds.push_back(cards[i]);
+        else if(suit == S_HEARTS) hearts.push_back(cards[i]);
+        else if(suit == S_CLUBS) clubs.push_back(cards[i]);
+    }
 }
 
 void getAmountPerSuit(int& clubs, int& diamonds, int& hearts, int& spades, const std::vector<Card>& cards)
 {
-  for(size_t i = 0; i < cards.size(); i++)
-  {
-    if(cards[i].suit == S_CLUBS) clubs++;
-    else if(cards[i].suit == S_DIAMONDS) diamonds++;
-    else if(cards[i].suit == S_HEARTS) hearts++;
-    else if(cards[i].suit == S_SPADES) spades++;
-  }
+    for(size_t i = 0; i < cards.size(); i++)
+    {
+        if(cards[i].suit == S_CLUBS) clubs++;
+        else if(cards[i].suit == S_DIAMONDS) diamonds++;
+        else if(cards[i].suit == S_HEARTS) hearts++;
+        else if(cards[i].suit == S_SPADES) spades++;
+    }
 }
 
 void getHighestNearFlush(std::vector<Card>& result, const std::vector<Card>& cards)
 {
-  std::vector<Card> spades;
-  std::vector<Card> diamonds;
-  std::vector<Card> hearts;
-  std::vector<Card> clubs;
+    std::vector<Card> spades;
+    std::vector<Card> diamonds;
+    std::vector<Card> hearts;
+    std::vector<Card> clubs;
 
-  splitIntoSuits(spades, diamonds, hearts, clubs, cards);
+    splitIntoSuits(spades, diamonds, hearts, clubs, cards);
 
-  if(spades.size() > diamonds.size() && spades.size() > hearts.size() && spades.size() > clubs.size())
-  {
-    result = spades;
-  }
-  else if(diamonds.size() > hearts.size() && hearts.size() > clubs.size())
-  {
-    result = diamonds;
-  }
-  else if(hearts.size() > clubs.size())
-  {
-    result = hearts;
-  }
-  else result = clubs;
+    if(spades.size() > diamonds.size() && spades.size() > hearts.size() && spades.size() > clubs.size())
+    {
+        result = spades;
+    }
+    else if(diamonds.size() > hearts.size() && hearts.size() > clubs.size())
+    {
+        result = diamonds;
+    }
+    else if(hearts.size() > clubs.size())
+    {
+        result = hearts;
+    }
+    else result = clubs;
 }
 
 
@@ -223,201 +223,201 @@ void getHighestNearFlush(std::vector<Card>& result, const std::vector<Card>& car
 
 
 void getWinChanceAgainst1AtFlop(double& win, double& tie, double& lose
-                              , const Card& hand1, const Card& hand2
-                              , const Card& table1, const Card& table2, const Card& table3)
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
-  c[2] = eval7_index(table1);
-  c[3] = eval7_index(table2);
-  c[4] = eval7_index(table3);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
+    c[2] = eval7_index(table1);
+    c[3] = eval7_index(table2);
+    c[4] = eval7_index(table3);
 
-  static const int NUMOTHER = 47;
+    static const int NUMOTHER = 47;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(v == c[2] || v == c[3] || v == c[4]) continue;
-    if(j >= NUMOTHER) break;
-
-    others[j] = v;
-    j++;
-  }
-
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
-
-  int count = 0;
-
-  //all possible 2-hand combinations of the other player + cards on the table
-  for(int i = 0; i < NUMOTHER - 1; i++) //table
-  for(int j = i + 1; j < NUMOTHER; j++) //table
-  for(int k = 0; k < NUMOTHER - 1; k++) //opponent hand
-  {
-    if(k == i || k == j) continue;
-    for(int l = k + 1; l < NUMOTHER; l++) //opponent hand
+    int j = 0;
+    for(int i = 0; i < 52; i++)
     {
-      if(l == i || l == j) continue;
-      c[5] = others[i];
-      c[6] = others[j];
-      c[7] = others[k];
-      c[8] = others[l];
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(v == c[2] || v == c[3] || v == c[4]) continue;
+        if(j >= NUMOTHER) break;
 
-      int yourVal = eval7(&c[0]);
-      int otherVal = eval7(&c[2]);
-
-      if(otherVal == yourVal) ties++;
-      else if(otherVal < yourVal) wins++;
-      else losses++;
-
-      count++;
+        others[j] = v;
+        j++;
     }
-  }
 
-  win = (double)wins / count;
-  tie = (double)ties / count;
-  lose = (double)losses / count;
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
+
+    int count = 0;
+
+    //all possible 2-hand combinations of the other player + cards on the table
+    for(int i = 0; i < NUMOTHER - 1; i++) //table
+        for(int j = i + 1; j < NUMOTHER; j++) //table
+            for(int k = 0; k < NUMOTHER - 1; k++) //opponent hand
+            {
+                if(k == i || k == j) continue;
+                for(int l = k + 1; l < NUMOTHER; l++) //opponent hand
+                {
+                    if(l == i || l == j) continue;
+                    c[5] = others[i];
+                    c[6] = others[j];
+                    c[7] = others[k];
+                    c[8] = others[l];
+
+                    int yourVal = eval7(&c[0]);
+                    int otherVal = eval7(&c[2]);
+
+                    if(otherVal == yourVal) ties++;
+                    else if(otherVal < yourVal) wins++;
+                    else losses++;
+
+                    count++;
+                }
+            }
+
+    win = (double)wins / count;
+    tie = (double)ties / count;
+    lose = (double)losses / count;
 }
 
 void getWinChanceAgainst1AtTurn(double& win, double& tie, double& lose
-                              , const Card& hand1, const Card& hand2
-                              , const Card& table1, const Card& table2, const Card& table3, const Card& table4)
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
-  c[2] = eval7_index(table1);
-  c[3] = eval7_index(table2);
-  c[4] = eval7_index(table3);
-  c[5] = eval7_index(table4);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
+    c[2] = eval7_index(table1);
+    c[3] = eval7_index(table2);
+    c[4] = eval7_index(table3);
+    c[5] = eval7_index(table4);
 
-  static const int NUMOTHER = 46;
+    static const int NUMOTHER = 46;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(v == c[2] || v == c[3] || v == c[4] || v == c[5]) continue;
-    if(j >= NUMOTHER) break;
-
-    others[j] = v;
-    j++;
-  }
-
-
-
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
-
-  int count = 0;
-
-  //all possible 2-hand combinations of the other player + cards on the table
-  for(int i = 0; i < NUMOTHER; i++) //table
-  for(int j = 0; j < NUMOTHER - 1; j++) //opponent hand
-  {
-    if(j == i) continue;
-    for(int k = j + 1; k < NUMOTHER; k++) //opponent hand
+    int j = 0;
+    for(int i = 0; i < 52; i++)
     {
-      if(k == i) continue;
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(v == c[2] || v == c[3] || v == c[4] || v == c[5]) continue;
+        if(j >= NUMOTHER) break;
 
-      c[6] = others[i];
-      c[7] = others[j];
-      c[8] = others[k];
-
-      int yourVal = eval7(&c[0]);
-      int otherVal = eval7(&c[2]);
-
-      if(otherVal == yourVal) ties++;
-      else if(otherVal < yourVal) wins++;
-      else losses++;
-
-      count++;
+        others[j] = v;
+        j++;
     }
-  }
 
-  win = (double)wins / count;
-  tie = (double)ties / count;
-  lose = (double)losses / count;
+
+
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
+
+    int count = 0;
+
+    //all possible 2-hand combinations of the other player + cards on the table
+    for(int i = 0; i < NUMOTHER; i++) //table
+        for(int j = 0; j < NUMOTHER - 1; j++) //opponent hand
+        {
+            if(j == i) continue;
+            for(int k = j + 1; k < NUMOTHER; k++) //opponent hand
+            {
+                if(k == i) continue;
+
+                c[6] = others[i];
+                c[7] = others[j];
+                c[8] = others[k];
+
+                int yourVal = eval7(&c[0]);
+                int otherVal = eval7(&c[2]);
+
+                if(otherVal == yourVal) ties++;
+                else if(otherVal < yourVal) wins++;
+                else losses++;
+
+                count++;
+            }
+        }
+
+    win = (double)wins / count;
+    tie = (double)ties / count;
+    lose = (double)losses / count;
 }
 
 void getWinChanceAgainst1AtRiver(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5)
+                                 , const Card& hand1, const Card& hand2
+                                 , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
-  c[2] = eval7_index(table1);
-  c[3] = eval7_index(table2);
-  c[4] = eval7_index(table3);
-  c[5] = eval7_index(table4);
-  c[6] = eval7_index(table5);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
+    c[2] = eval7_index(table1);
+    c[3] = eval7_index(table2);
+    c[4] = eval7_index(table3);
+    c[5] = eval7_index(table4);
+    c[6] = eval7_index(table5);
 
-  static const int NUMOTHER = 45;
+    static const int NUMOTHER = 45;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(v == c[2] || v == c[3] || v == c[4] || v == c[5] || v == c[6]) continue;
-    if(j >= NUMOTHER) break;
+    int j = 0;
+    for(int i = 0; i < 52; i++)
+    {
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(v == c[2] || v == c[3] || v == c[4] || v == c[5] || v == c[6]) continue;
+        if(j >= NUMOTHER) break;
 
-    others[j] = v;
-    j++;
-  }
+        others[j] = v;
+        j++;
+    }
 
-  int yourVal = eval7(&c[0]);
+    int yourVal = eval7(&c[0]);
 
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
 
-  int count = 0;
+    int count = 0;
 
-  //all possible 2-hand combinations of the other player
-  for(int i = 0; i < NUMOTHER; i++)
-  for(int j = i + 1; j < NUMOTHER; j++)
-  {
-    c[7] = others[i];
-    c[8] = others[j];
+    //all possible 2-hand combinations of the other player
+    for(int i = 0; i < NUMOTHER; i++)
+        for(int j = i + 1; j < NUMOTHER; j++)
+        {
+            c[7] = others[i];
+            c[8] = others[j];
 
-    int otherVal = eval7(&c[2]);
+            int otherVal = eval7(&c[2]);
 
-    if(otherVal == yourVal) ties++;
-    else if(otherVal < yourVal) wins++;
-    else losses++;
+            if(otherVal == yourVal) ties++;
+            else if(otherVal < yourVal) wins++;
+            else losses++;
 
-    count++;
-  }
+            count++;
+        }
 
-  win = (double)wins / count;
-  tie = (double)ties / count;
-  lose = (double)losses / count;
+    win = (double)wins / count;
+    tie = (double)ties / count;
+    lose = (double)losses / count;
 }
 
 
@@ -437,284 +437,284 @@ have your really new randomly shuffled cards.
 */
 static void shuffleN(int* values, int size, int amount)
 {
-  for(int i = 0; i < amount; i++)
-  {
-    int r = getRandomFast(0, size - 1);
-    std::swap(values[i], values[r]);
-  }
+    for(int i = 0; i < amount; i++)
+    {
+        int r = getRandomFast(0, size - 1);
+        std::swap(values[i], values[r]);
+    }
 }
 
 void getWinChanceAgainstNAtPreFlop(double& win, double& tie, double& lose
-                                 , const Card& hand1, const Card& hand2
-                                 , int numOpponents, int numSamples)
+                                   , const Card& hand1, const Card& hand2
+                                   , int numOpponents, int numSamples)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
 
-  static const int NUMOTHER = 50;
+    static const int NUMOTHER = 50;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(j >= NUMOTHER) break;
-
-    others[j] = v;
-    j++;
-  }
-
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
-
-  for(int i = 0; i < numSamples; i++)
-  {
-    shuffleN(others, NUMOTHER, 2 + numOpponents * 2); //the two extra table cards, and the cards of all opponents
-
-    c[2] = others[0];
-    c[3] = others[1];
-    c[4] = others[2];
-    c[5] = others[3];
-    c[6] = others[4];
-
-    int yourVal = eval7(&c[0]);
-
-    int status = 2; //2: you win, 1: you tie, 0: you lose
-
-    for(int j = 0; j < numOpponents; j++)
+    int j = 0;
+    for(int i = 0; i < 52; i++)
     {
-      //opponents hand
-      c[7] = others[5 + j * 2];
-      c[8] = others[6 + j * 2];
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(j >= NUMOTHER) break;
 
-      int opponentVal = eval7(&c[2]);
-
-      if(opponentVal == yourVal) status = 1; //tie
-      else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        others[j] = v;
+        j++;
     }
 
-    if(status == 0) losses++;
-    else if(status == 1) ties++;
-    else wins++;
-  }
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
 
-  win = (double)wins / numSamples;
-  tie = (double)ties / numSamples;
-  lose = (double)losses / numSamples;
+    for(int i = 0; i < numSamples; i++)
+    {
+        shuffleN(others, NUMOTHER, 2 + numOpponents * 2); //the two extra table cards, and the cards of all opponents
+
+        c[2] = others[0];
+        c[3] = others[1];
+        c[4] = others[2];
+        c[5] = others[3];
+        c[6] = others[4];
+
+        int yourVal = eval7(&c[0]);
+
+        int status = 2; //2: you win, 1: you tie, 0: you lose
+
+        for(int j = 0; j < numOpponents; j++)
+        {
+            //opponents hand
+            c[7] = others[5 + j * 2];
+            c[8] = others[6 + j * 2];
+
+            int opponentVal = eval7(&c[2]);
+
+            if(opponentVal == yourVal) status = 1; //tie
+            else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        }
+
+        if(status == 0) losses++;
+        else if(status == 1) ties++;
+        else wins++;
+    }
+
+    win = (double)wins / numSamples;
+    tie = (double)ties / numSamples;
+    lose = (double)losses / numSamples;
 }
 
 void getWinChanceAgainstNAtFlop(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3
-                               , int numOpponents, int numSamples)
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3
+                                , int numOpponents, int numSamples)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
-  c[2] = eval7_index(table1);
-  c[3] = eval7_index(table2);
-  c[4] = eval7_index(table3);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
+    c[2] = eval7_index(table1);
+    c[3] = eval7_index(table2);
+    c[4] = eval7_index(table3);
 
-  static const int NUMOTHER = 47;
+    static const int NUMOTHER = 47;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(v == c[2] || v == c[3] || v == c[4]) continue;
-    if(j >= NUMOTHER) break;
-
-    others[j] = v;
-    j++;
-  }
-
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
-
-  for(int i = 0; i < numSamples; i++)
-  {
-    shuffleN(others, NUMOTHER, 2 + numOpponents * 2); //the two extra table cards, and the cards of all opponents
-
-    c[5] = others[0];
-    c[6] = others[1];
-
-    int yourVal = eval7(&c[0]);
-
-    int status = 2; //2: you win, 1: you tie, 0: you lose
-
-    for(int j = 0; j < numOpponents; j++)
+    int j = 0;
+    for(int i = 0; i < 52; i++)
     {
-      //opponents hand
-      c[7] = others[2 + j * 2];
-      c[8] = others[3 + j * 2];
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(v == c[2] || v == c[3] || v == c[4]) continue;
+        if(j >= NUMOTHER) break;
 
-      int opponentVal = eval7(&c[2]);
-
-      if(opponentVal == yourVal) status = 1; //tie
-      else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        others[j] = v;
+        j++;
     }
 
-    if(status == 0) losses++;
-    else if(status == 1) ties++;
-    else wins++;
-  }
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
 
-  win = (double)wins / numSamples;
-  tie = (double)ties / numSamples;
-  lose = (double)losses / numSamples;
+    for(int i = 0; i < numSamples; i++)
+    {
+        shuffleN(others, NUMOTHER, 2 + numOpponents * 2); //the two extra table cards, and the cards of all opponents
+
+        c[5] = others[0];
+        c[6] = others[1];
+
+        int yourVal = eval7(&c[0]);
+
+        int status = 2; //2: you win, 1: you tie, 0: you lose
+
+        for(int j = 0; j < numOpponents; j++)
+        {
+            //opponents hand
+            c[7] = others[2 + j * 2];
+            c[8] = others[3 + j * 2];
+
+            int opponentVal = eval7(&c[2]);
+
+            if(opponentVal == yourVal) status = 1; //tie
+            else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        }
+
+        if(status == 0) losses++;
+        else if(status == 1) ties++;
+        else wins++;
+    }
+
+    win = (double)wins / numSamples;
+    tie = (double)ties / numSamples;
+    lose = (double)losses / numSamples;
 }
 
 void getWinChanceAgainstNAtTurn(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3, const Card& table4
-                               , int numOpponents, int numSamples)
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4
+                                , int numOpponents, int numSamples)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
-  c[2] = eval7_index(table1);
-  c[3] = eval7_index(table2);
-  c[4] = eval7_index(table3);
-  c[5] = eval7_index(table4);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
+    c[2] = eval7_index(table1);
+    c[3] = eval7_index(table2);
+    c[4] = eval7_index(table3);
+    c[5] = eval7_index(table4);
 
-  static const int NUMOTHER = 46;
+    static const int NUMOTHER = 46;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(v == c[2] || v == c[3] || v == c[4] || v == c[5]) continue;
-    if(j >= NUMOTHER) break;
-
-    others[j] = v;
-    j++;
-  }
-
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
-
-  for(int i = 0; i < numSamples; i++)
-  {
-    shuffleN(others, NUMOTHER, 1 + numOpponents * 2); //the one extra table card, and the cards of all opponents
-
-    c[6] = others[0];
-
-    int yourVal = eval7(&c[0]);
-
-    int status = 2; //2: you win, 1: you tie, 0: you lose
-
-    for(int j = 0; j < numOpponents; j++)
+    int j = 0;
+    for(int i = 0; i < 52; i++)
     {
-      //opponents hand
-      c[7] = others[1 + j * 2];
-      c[8] = others[2 + j * 2];
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(v == c[2] || v == c[3] || v == c[4] || v == c[5]) continue;
+        if(j >= NUMOTHER) break;
 
-      int opponentVal = eval7(&c[2]);
-
-      if(opponentVal == yourVal) status = 1; //tie
-      else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        others[j] = v;
+        j++;
     }
 
-    if(status == 0) losses++;
-    else if(status == 1) ties++;
-    else wins++;
-  }
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
 
-  win = (double)wins / numSamples;
-  tie = (double)ties / numSamples;
-  lose = (double)losses / numSamples;
+    for(int i = 0; i < numSamples; i++)
+    {
+        shuffleN(others, NUMOTHER, 1 + numOpponents * 2); //the one extra table card, and the cards of all opponents
+
+        c[6] = others[0];
+
+        int yourVal = eval7(&c[0]);
+
+        int status = 2; //2: you win, 1: you tie, 0: you lose
+
+        for(int j = 0; j < numOpponents; j++)
+        {
+            //opponents hand
+            c[7] = others[1 + j * 2];
+            c[8] = others[2 + j * 2];
+
+            int opponentVal = eval7(&c[2]);
+
+            if(opponentVal == yourVal) status = 1; //tie
+            else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        }
+
+        if(status == 0) losses++;
+        else if(status == 1) ties++;
+        else wins++;
+    }
+
+    win = (double)wins / numSamples;
+    tie = (double)ties / numSamples;
+    lose = (double)losses / numSamples;
 }
 
 void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
-                                , const Card& hand1, const Card& hand2
-                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
-                                , int numOpponents, int numSamples)
+                                 , const Card& hand1, const Card& hand2
+                                 , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
+                                 , int numOpponents, int numSamples)
 {
-  win = tie = lose = 0.0;
+    win = tie = lose = 0.0;
 
-  //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
-  int c[9];
+    //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
+    int c[9];
 
-  c[0] = eval7_index(hand1);
-  c[1] = eval7_index(hand2);
-  c[2] = eval7_index(table1);
-  c[3] = eval7_index(table2);
-  c[4] = eval7_index(table3);
-  c[5] = eval7_index(table4);
-  c[6] = eval7_index(table5);
+    c[0] = eval7_index(hand1);
+    c[1] = eval7_index(hand2);
+    c[2] = eval7_index(table1);
+    c[3] = eval7_index(table2);
+    c[4] = eval7_index(table3);
+    c[5] = eval7_index(table4);
+    c[6] = eval7_index(table5);
 
-  static const int NUMOTHER = 45;
+    static const int NUMOTHER = 45;
 
-  int others[NUMOTHER];
+    int others[NUMOTHER];
 
-  int j = 0;
-  for(int i = 0; i < 52; i++)
-  {
-    int v = eval7_index(Card(i));
-    if(v == c[0] || v == c[1]) continue;
-    if(v == c[2] || v == c[3] || v == c[4] || v == c[5] || v == c[6]) continue;
-    if(j >= NUMOTHER) break;
-
-    others[j] = v;
-    j++;
-  }
-
-  int wins = 0;
-  int ties = 0;
-  int losses = 0;
-
-  for(int i = 0; i < numSamples; i++)
-  {
-    shuffleN(others, NUMOTHER,  numOpponents * 2); //the cards of all opponents
-
-    int yourVal = eval7(&c[0]);
-
-    int status = 2; //2: you win, 1: you tie, 0: you lose
-
-    for(int j = 0; j < numOpponents; j++)
+    int j = 0;
+    for(int i = 0; i < 52; i++)
     {
-      //opponents hand
-      c[7] = others[0 + j * 2];
-      c[8] = others[1 + j * 2];
+        int v = eval7_index(Card(i));
+        if(v == c[0] || v == c[1]) continue;
+        if(v == c[2] || v == c[3] || v == c[4] || v == c[5] || v == c[6]) continue;
+        if(j >= NUMOTHER) break;
 
-      int opponentVal = eval7(&c[2]);
-
-      if(opponentVal == yourVal) status = 1; //tie
-      else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        others[j] = v;
+        j++;
     }
 
-    if(status == 0) losses++;
-    else if(status == 1) ties++;
-    else wins++;
-  }
+    int wins = 0;
+    int ties = 0;
+    int losses = 0;
 
-  win = (double)wins / numSamples;
-  tie = (double)ties / numSamples;
-  lose = (double)losses / numSamples;
+    for(int i = 0; i < numSamples; i++)
+    {
+        shuffleN(others, NUMOTHER,  numOpponents * 2); //the cards of all opponents
+
+        int yourVal = eval7(&c[0]);
+
+        int status = 2; //2: you win, 1: you tie, 0: you lose
+
+        for(int j = 0; j < numOpponents; j++)
+        {
+            //opponents hand
+            c[7] = others[0 + j * 2];
+            c[8] = others[1 + j * 2];
+
+            int opponentVal = eval7(&c[2]);
+
+            if(opponentVal == yourVal) status = 1; //tie
+            else if(opponentVal > yourVal) { status = 0; break; } //lose, stop rest of loop.
+        }
+
+        if(status == 0) losses++;
+        else if(status == 1) ties++;
+        else wins++;
+    }
+
+    win = (double)wins / numSamples;
+    tie = (double)ties / numSamples;
+    lose = (double)losses / numSamples;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -722,57 +722,57 @@ void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
 
 int eval7(const int* cards)
 {
-  static bool inited = false;
-  if(!inited) { PokerEval::InitializeHandRankingTables(); inited = true; }
+    static bool inited = false;
+    if(!inited) { PokerEval::InitializeHandRankingTables(); inited = true; }
 
-  return (int)PokerEval::RankHand( PokerEval::HandMasksTable[cards[0]] | PokerEval::HandMasksTable[cards[1]] |
-                                    PokerEval::HandMasksTable[cards[2]] | PokerEval::HandMasksTable[cards[3]] |
-                                    PokerEval::HandMasksTable[cards[4]] | PokerEval::HandMasksTable[cards[5]] |
-                                    PokerEval::HandMasksTable[cards[6]] );
+    return (int)PokerEval::RankHand( PokerEval::HandMasksTable[cards[0]] | PokerEval::HandMasksTable[cards[1]] |
+            PokerEval::HandMasksTable[cards[2]] | PokerEval::HandMasksTable[cards[3]] |
+            PokerEval::HandMasksTable[cards[4]] | PokerEval::HandMasksTable[cards[5]] |
+            PokerEval::HandMasksTable[cards[6]] );
 }
 
 int eval7_index(const Card& card)
 {
-  //return card.getIndex();
+    //return card.getIndex();
 
-  int v = (card.value - 2);
-  int s = (int)card.suit * 13;
-  return s + v;
+    int v = (card.value - 2);
+    int s = (int)card.suit * 13;
+    return s + v;
 }
 
 ComboType eval7_category(int result)
 {
-  return (ComboType)(result >> 20);
+    return (ComboType)(result >> 20);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 double getPotEquity(const std::vector<Card>& holeCards, const std::vector<Card>& boardCards, int numOpponents, int numSamples)
 {
-  double win = 0, tie = 0, lose = 0;
+    double win = 0, tie = 0, lose = 0;
 
-  if(boardCards.empty()) //pre-flop
-  {
-    getWinChanceAgainstNAtPreFlop(win, tie, lose, holeCards[0], holeCards[1], numOpponents, numSamples);
-  }
-  else if(boardCards.size() == 3) //flop
-  {
-    getWinChanceAgainstNAtFlop(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], numOpponents, numSamples);
-  }
-  else if(boardCards.size() == 4) //turn
-  {
-    if(numOpponents == 1) getWinChanceAgainst1AtTurn(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3]);
-    else getWinChanceAgainstNAtTurn(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], numOpponents, numSamples);
-  }
-  else if(boardCards.size() == 5) //river
-  {
-    if(numOpponents == 1) getWinChanceAgainst1AtRiver(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], boardCards[4]);
-    else getWinChanceAgainstNAtRiver(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], boardCards[4], numOpponents, numSamples);
-  }
+    if(boardCards.empty()) //pre-flop
+    {
+        getWinChanceAgainstNAtPreFlop(win, tie, lose, holeCards[0], holeCards[1], numOpponents, numSamples);
+    }
+    else if(boardCards.size() == 3) //flop
+    {
+        getWinChanceAgainstNAtFlop(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], numOpponents, numSamples);
+    }
+    else if(boardCards.size() == 4) //turn
+    {
+        if(numOpponents == 1) getWinChanceAgainst1AtTurn(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3]);
+        else getWinChanceAgainstNAtTurn(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], numOpponents, numSamples);
+    }
+    else if(boardCards.size() == 5) //river
+    {
+        if(numOpponents == 1) getWinChanceAgainst1AtRiver(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], boardCards[4]);
+        else getWinChanceAgainstNAtRiver(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], boardCards[4], numOpponents, numSamples);
+    }
 
-  double result = win;
-  result += tie / numOpponents; //split pots
-  return result;
+    double result = win;
+    result += tie / numOpponents; //split pots
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -792,32 +792,32 @@ numPlayers: input, amount of players
 */
 static void addWinTieLose(int* wins, int* ties, int* losses, const int* val, int numPlayers)
 {
-  //find winner or ties without sorting
-  int highest = -1;
-  bool tie = false;
+    //find winner or ties without sorting
+    int highest = -1;
+    bool tie = false;
 
-  for(int j = 0; j < numPlayers; j++)
-  {
-    if(val[j] > highest)
+    for(int j = 0; j < numPlayers; j++)
     {
-      tie = false;
-      highest = val[j];
+        if(val[j] > highest)
+        {
+            tie = false;
+            highest = val[j];
+        }
+        else if(val[j] == highest)
+        {
+            tie = true;
+        }
     }
-    else if(val[j] == highest)
-    {
-      tie = true;
-    }
-  }
 
-  for(int j = 0; j < numPlayers; j++)
-  {
-    if(val[j] == highest)
+    for(int j = 0; j < numPlayers; j++)
     {
-      if(tie) ties[j]++;
-      else wins[j]++;
+        if(val[j] == highest)
+        {
+            if(tie) ties[j]++;
+            else wins[j]++;
+        }
+        else losses[j]++;
     }
-    else losses[j]++;
-  }
 }
 
 /*
@@ -828,243 +828,243 @@ val: array of numPlayers ints, used as working memory (to avoid recreating it al
 numPlayers: input, amount of players
 */
 void testPlayers(int* wins, int* ties, int* losses
-               , int* v, int* val
-               , const int* holeCards1, const int* holeCards2
-               , int numPlayers)
+                 , int* v, int* val
+                 , const int* holeCards1, const int* holeCards2
+                 , int numPlayers)
 {
-  for(int j = 0; j < numPlayers; j++)
-  {
-    //hand
-    v[0] = holeCards1[j];
-    v[1] = holeCards2[j];
+    for(int j = 0; j < numPlayers; j++)
+    {
+        //hand
+        v[0] = holeCards1[j];
+        v[1] = holeCards2[j];
 
-    val[j] = eval7(&v[0]);
-  }
+        val[j] = eval7(&v[0]);
+    }
 
-  addWinTieLose(&wins[0], &ties[0], &losses[0], &val[0], numPlayers);
+    addWinTieLose(&wins[0], &ties[0], &losses[0], &val[0], numPlayers);
 
 }
 
 bool getWinChanceWithKnownHands(std::vector<double>& win, std::vector<double>& tie, std::vector<double>& lose
-                              , const std::vector<Card>& holeCards1
-                              , const std::vector<Card>& holeCards2
-                              , const std::vector<Card>& boardCards
-                              , int numSamples)
+                                , const std::vector<Card>& holeCards1
+                                , const std::vector<Card>& holeCards2
+                                , const std::vector<Card>& boardCards
+                                , int numSamples)
 {
-  int numPlayers = holeCards1.size();
-  int numBoard = (int)boardCards.size();
-  if(numPlayers != (int)holeCards2.size()) return false;
-  if(numPlayers > 23) return false;
-  if(numBoard > 5) return false;
+    int numPlayers = holeCards1.size();
+    int numBoard = (int)boardCards.size();
+    if(numPlayers != (int)holeCards2.size()) return false;
+    if(numPlayers > 23) return false;
+    if(numBoard > 5) return false;
 
-  win.resize(numPlayers);
-  tie.resize(numPlayers);
-  lose.resize(numPlayers);
+    win.resize(numPlayers);
+    tie.resize(numPlayers);
+    lose.resize(numPlayers);
 
-  std::vector<int> wins(numPlayers);
-  std::vector<int> ties(numPlayers);
-  std::vector<int> losses(numPlayers);
+    std::vector<int> wins(numPlayers);
+    std::vector<int> ties(numPlayers);
+    std::vector<int> losses(numPlayers);
 
-  std::vector<int> holeCardsInt1;
-  std::vector<int> holeCardsInt2;
-  std::vector<int> boardCardsInt;
+    std::vector<int> holeCardsInt1;
+    std::vector<int> holeCardsInt2;
+    std::vector<int> boardCardsInt;
 
-  std::vector<int> known_index;
-  for(int i = 0; i < numPlayers; i++)
-  {
-    known_index.push_back(holeCards1[i].getIndex());
-    known_index.push_back(holeCards2[i].getIndex());
-    holeCardsInt1.push_back(eval7_index(holeCards1[i].getIndex()));
-    holeCardsInt2.push_back(eval7_index(holeCards2[i].getIndex()));
-
-    wins[i] = 0;
-    ties[i] = 0;
-    losses[i] = 0;
-  }
-  for(int i = 0; i < numBoard; i++)
-  {
-    known_index.push_back(boardCards[i].getIndex());
-    boardCardsInt.push_back(eval7_index(boardCards[i].getIndex()));
-  }
-
-  bool flags[52];
-
-  for(int i = 0; i < 52; i++)
-  {
-    flags[i] = true;
-  }
-
-  for(size_t i = 0; i < known_index.size(); i++)
-  {
-    if(known_index[i] < 0 || known_index[i] >= 52) return false;
-    flags[known_index[i]] = false;
-  }
-
-
-  int numOther = 52 - numPlayers * 2 - numBoard;
-
-  int numUnknown = 5 - numBoard;
-
-  double exhaustiveSamples = combination(numOther, numUnknown) + 0.5; //avoid rounding errors
-
-  int val[numPlayers];
-
-  int count = 0;
-
-  if(exhaustiveSamples > (double)numSamples) //use monte carlo
-  {
-    count = numSamples;
-
-    //this is a memory structure made to easily have 7 cards in a row that can be evaluated, and can be shuffled at the locations where needed. It contains: 2 hand cards, 0-5 known board cards, and the unknown cards with the unknown board cards first (can be shuffled)
-    std::vector<int> v(2 + numBoard + numOther);
-    for(int i = 0; i < numBoard; i++) v[2 + i] = boardCardsInt[i];
-
-    int* other = &v[2 + numBoard]; //cards other than the known ones
-
-
-    for(int i = 0, j = 0; i < 52; i++)
+    std::vector<int> known_index;
+    for(int i = 0; i < numPlayers; i++)
     {
-      if(flags[i])
-      {
-        other[j] = eval7_index(Card(i));
-        j++;
-      }
+        known_index.push_back(holeCards1[i].getIndex());
+        known_index.push_back(holeCards2[i].getIndex());
+        holeCardsInt1.push_back(eval7_index(holeCards1[i].getIndex()));
+        holeCardsInt2.push_back(eval7_index(holeCards2[i].getIndex()));
+
+        wins[i] = 0;
+        ties[i] = 0;
+        losses[i] = 0;
+    }
+    for(int i = 0; i < numBoard; i++)
+    {
+        known_index.push_back(boardCards[i].getIndex());
+        boardCardsInt.push_back(eval7_index(boardCards[i].getIndex()));
     }
 
-    for(int i = 0; i < numSamples; i++)
+    bool flags[52];
+
+    for(int i = 0; i < 52; i++)
     {
-      shuffleN(&other[0], numOther,  numUnknown); //the cards of all opponents
-      testPlayers(&wins[0], &ties[0], &losses[0], &v[0], &val[0], &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
+        flags[i] = true;
     }
-  }
-  else //do it exhaustively
-  {
 
-    //this is a memory structure made to easily have 7 cards in a row that can be evaluated, and can be shuffled at the locations where needed. It contains: 2 hand cards, 0-5 known board cards, and the unknown cards with the unknown board cards first (can be shuffled)
-    std::vector<int> others;
-    for(int i = 0; i < 52; i++) others.push_back(eval7_index(Card(i)));
-
-    int c[7];
-
-    if(numBoard == 0)
+    for(size_t i = 0; i < known_index.size(); i++)
     {
-      for (int card1 = 0; card1 < numOther - 4; card1++)
-      {
-        c[2] = others[card1];
-        for (int card2 = card1 + 1; card2 < numOther - 3; card2++)
+        if(known_index[i] < 0 || known_index[i] >= 52) return false;
+        flags[known_index[i]] = false;
+    }
+
+
+    int numOther = 52 - numPlayers * 2 - numBoard;
+
+    int numUnknown = 5 - numBoard;
+
+    double exhaustiveSamples = combination(numOther, numUnknown) + 0.5; //avoid rounding errors
+
+    int val[numPlayers];
+
+    int count = 0;
+
+    if(exhaustiveSamples > (double)numSamples) //use monte carlo
+    {
+        count = numSamples;
+
+        //this is a memory structure made to easily have 7 cards in a row that can be evaluated, and can be shuffled at the locations where needed. It contains: 2 hand cards, 0-5 known board cards, and the unknown cards with the unknown board cards first (can be shuffled)
+        std::vector<int> v(2 + numBoard + numOther);
+        for(int i = 0; i < numBoard; i++) v[2 + i] = boardCardsInt[i];
+
+        int* other = &v[2 + numBoard]; //cards other than the known ones
+
+
+        for(int i = 0, j = 0; i < 52; i++)
         {
-          c[3] = others[card2];
-          for (int card3 = card2 + 1; card3 < numOther - 2; card3++)
-          {
-            c[4] = others[card3];
-            for (int card4 = card3 + 1; card4 < numOther - 1; card4++)
+            if(flags[i])
             {
-              c[5] = others[card4];
-              for (int card5 = card4 + 1; card5 < numOther - 0; card5++)
-              {
-                c[6] = others[card5];
+                other[j] = eval7_index(Card(i));
+                j++;
+            }
+        }
+
+        for(int i = 0; i < numSamples; i++)
+        {
+            shuffleN(&other[0], numOther,  numUnknown); //the cards of all opponents
+            testPlayers(&wins[0], &ties[0], &losses[0], &v[0], &val[0], &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
+        }
+    }
+    else //do it exhaustively
+    {
+
+        //this is a memory structure made to easily have 7 cards in a row that can be evaluated, and can be shuffled at the locations where needed. It contains: 2 hand cards, 0-5 known board cards, and the unknown cards with the unknown board cards first (can be shuffled)
+        std::vector<int> others;
+        for(int i = 0; i < 52; i++) others.push_back(eval7_index(Card(i)));
+
+        int c[7];
+
+        if(numBoard == 0)
+        {
+            for (int card1 = 0; card1 < numOther - 4; card1++)
+            {
+                c[2] = others[card1];
+                for (int card2 = card1 + 1; card2 < numOther - 3; card2++)
+                {
+                    c[3] = others[card2];
+                    for (int card3 = card2 + 1; card3 < numOther - 2; card3++)
+                    {
+                        c[4] = others[card3];
+                        for (int card4 = card3 + 1; card4 < numOther - 1; card4++)
+                        {
+                            c[5] = others[card4];
+                            for (int card5 = card4 + 1; card5 < numOther - 0; card5++)
+                            {
+                                c[6] = others[card5];
+                                testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
+                                count++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(numBoard == 1)
+        {
+            c[2] = boardCardsInt[0];
+
+            for (int card1 = 0; card1 < numOther - 3; card1++)
+            {
+                c[3] = others[card1];
+                for (int card2 = card1 + 1; card2 < numOther - 2; card2++)
+                {
+                    c[4] = others[card2];
+                    for (int card3 = card2 + 1; card3 < numOther - 1; card3++)
+                    {
+                        c[5] = others[card3];
+                        for (int card4 = card3 + 1; card4 < numOther - 0; card4++)
+                        {
+                            c[6] = others[card4];
+                            testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        else if(numBoard == 2)
+        {
+            c[2] = boardCardsInt[0];
+            c[3] = boardCardsInt[1];
+
+            for (int card1 = 0; card1 < numOther - 2; card1++)
+            {
+                c[4] = others[card1];
+                for (int card2 = card1 + 1; card2 < numOther - 1; card2++)
+                {
+                    c[5] = others[card2];
+                    for (int card3 = card2 + 1; card3 < numOther - 0; card3++)
+                    {
+                        c[6] = others[card3];
+                        testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
+                        count++;
+                    }
+                }
+            }
+        }
+        else if(numBoard == 3)
+        {
+            c[2] = boardCardsInt[0];
+            c[3] = boardCardsInt[1];
+            c[4] = boardCardsInt[2];
+
+            for (int card1 = 0; card1 < numOther - 1; card1++)
+            {
+                c[5] = others[card1];
+                for (int card2 = card1 + 1; card2 < numOther - 0; card2++)
+                {
+                    c[6] = others[card2];
+                    testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
+                    count++;
+                }
+            }
+        }
+        else if(numBoard == 4)
+        {
+            c[2] = boardCardsInt[0];
+            c[3] = boardCardsInt[1];
+            c[4] = boardCardsInt[2];
+            c[5] = boardCardsInt[3];
+
+            for (int card1 = 0; card1 < numOther - 0; card1++)
+            {
+                c[6] = others[card1];
                 testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
                 count++;
-              }
             }
-          }
         }
-      }
-    }
-    else if(numBoard == 1)
-    {
-      c[2] = boardCardsInt[0];
-
-      for (int card1 = 0; card1 < numOther - 3; card1++)
-      {
-        c[3] = others[card1];
-        for (int card2 = card1 + 1; card2 < numOther - 2; card2++)
+        else if(numBoard == 5)
         {
-          c[4] = others[card2];
-          for (int card3 = card2 + 1; card3 < numOther - 1; card3++)
-          {
-            c[5] = others[card3];
-            for (int card4 = card3 + 1; card4 < numOther - 0; card4++)
-            {
-              c[6] = others[card4];
-              testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
-              count++;
-            }
-          }
-        }
-      }
-    }
-    else if(numBoard == 2)
-    {
-      c[2] = boardCardsInt[0];
-      c[3] = boardCardsInt[1];
+            c[2] = boardCardsInt[0];
+            c[3] = boardCardsInt[1];
+            c[4] = boardCardsInt[2];
+            c[5] = boardCardsInt[3];
+            c[6] = boardCardsInt[4];
 
-      for (int card1 = 0; card1 < numOther - 2; card1++)
-      {
-        c[4] = others[card1];
-        for (int card2 = card1 + 1; card2 < numOther - 1; card2++)
-        {
-          c[5] = others[card2];
-          for (int card3 = card2 + 1; card3 < numOther - 0; card3++)
-          {
-            c[6] = others[card3];
             testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
             count++;
-          }
         }
-      }
+
     }
-    else if(numBoard == 3)
+
+    for(int i = 0; i < numPlayers; i++)
     {
-      c[2] = boardCardsInt[0];
-      c[3] = boardCardsInt[1];
-      c[4] = boardCardsInt[2];
-
-      for (int card1 = 0; card1 < numOther - 1; card1++)
-      {
-        c[5] = others[card1];
-        for (int card2 = card1 + 1; card2 < numOther - 0; card2++)
-        {
-          c[6] = others[card2];
-          testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
-          count++;
-        }
-      }
-    }
-    else if(numBoard == 4)
-    {
-      c[2] = boardCardsInt[0];
-      c[3] = boardCardsInt[1];
-      c[4] = boardCardsInt[2];
-      c[5] = boardCardsInt[3];
-
-      for (int card1 = 0; card1 < numOther - 0; card1++)
-      {
-        c[6] = others[card1];
-        testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
-        count++;
-      }
-    }
-    else if(numBoard == 5)
-    {
-      c[2] = boardCardsInt[0];
-      c[3] = boardCardsInt[1];
-      c[4] = boardCardsInt[2];
-      c[5] = boardCardsInt[3];
-      c[6] = boardCardsInt[4];
-
-      testPlayers(&wins[0], &ties[0], &losses[0], c, val, &holeCardsInt1[0], &holeCardsInt2[0], numPlayers);
-      count++;
+        win[i] = (double)wins[i] / count;
+        tie[i] = (double)ties[i] / count;
+        lose[i] = (double)losses[i] / count;
     }
 
-  }
-
-  for(int i = 0; i < numPlayers; i++)
-  {
-    win[i] = (double)wins[i] / count;
-    tie[i] = (double)ties[i] / count;
-    lose[i] = (double)losses[i] / count;
-  }
-
-  return true;
+    return true;
 }

@@ -27,10 +27,10 @@ int getSklanskyMalmuthGroup(const Card& card1, const Card& card2);
 double getRealPlayStatisticsEV(const Card& card1, const Card& card2);
 
 void splitIntoSuits(std::vector<Card>& spades
-                  , std::vector<Card>& diamonds
-                  , std::vector<Card>& hearts
-                  , std::vector<Card>& clubs
-                  , const std::vector<Card>& cards);
+                    , std::vector<Card>& diamonds
+                    , std::vector<Card>& hearts
+                    , std::vector<Card>& clubs
+                    , const std::vector<Card>& cards);
 
 //does NOT reset the integers to 0 first, make sure you initialize them to 0!
 void getAmountPerSuit(int& clubs, int& diamonds, int& hearts, int& spades, const std::vector<Card>& cards);
@@ -77,10 +77,10 @@ numSamples: used when this function will use many samples to simulate many possi
 returns false if error happened (such as invalid parameters)
 */
 bool getWinChanceWithKnownHands(std::vector<double>& win, std::vector<double>& tie, std::vector<double>& lose
-                              , const std::vector<Card>& holeCards1
-                              , const std::vector<Card>& holeCards2
-                              , const std::vector<Card>& boardCards
-                              , int numSamples = 50000);
+                                , const std::vector<Card>& holeCards1
+                                , const std::vector<Card>& holeCards2
+                                , const std::vector<Card>& boardCards
+                                , int numSamples = 50000);
 
 
 
@@ -110,16 +110,16 @@ function or a faster one for the hand evaluations). Check for example articles l
 
 
 void getWinChanceAgainst1AtFlop(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3);
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3);
 
 void getWinChanceAgainst1AtTurn(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3, const Card& table4);
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4);
 
 void getWinChanceAgainst1AtRiver(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5);
+                                 , const Card& hand1, const Card& hand2
+                                 , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5);
 
 
 /*
@@ -132,23 +132,23 @@ time is needed. Setting it lower makes your bot faster.
 */
 
 void getWinChanceAgainstNAtPreFlop(double& win, double& tie, double& lose
-                                 , const Card& hand1, const Card& hand2
-                                 , int numOpponents, int numSamples = 50000);
+                                   , const Card& hand1, const Card& hand2
+                                   , int numOpponents, int numSamples = 50000);
 
 
 void getWinChanceAgainstNAtFlop(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3
-                               , int numOpponents, int numSamples = 50000);
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3
+                                , int numOpponents, int numSamples = 50000);
 
 void getWinChanceAgainstNAtTurn(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3, const Card& table4
-                               , int numOpponents, int numSamples = 50000);
+                                , const Card& hand1, const Card& hand2
+                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4
+                                , int numOpponents, int numSamples = 50000);
 
 void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
-                               , const Card& hand1, const Card& hand2
-                               , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
-                               , int numOpponents, int numSamples = 50000);
+                                 , const Card& hand1, const Card& hand2
+                                 , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
+                                 , int numOpponents, int numSamples = 50000);
 
 #endif // POKERMATH_H
