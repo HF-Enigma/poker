@@ -7,8 +7,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
+#include <ctime>
 
 #include "engine/game.h"
+#include "engine/pokereval.h"
 
 const char PLAYER_NAME[] = "hf_enigma";
 
@@ -109,6 +111,12 @@ int main(int argc, char **argv){
         printf("usage: game <server_ip> <server_port> <player_ip> <player_port> <player_id>\n");
         return -1;
     }
+
+    // initialize
+    clock_t t = clock();
+    PokerEval::InitializeHandRankingTables();
+    t = clock() - t;
+    printf("Time to initialize PokerEval %f s\n", t/(float)CLOCKS_PER_SEC);
 
     // connect to server
     int client_socket;

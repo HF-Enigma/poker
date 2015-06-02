@@ -161,7 +161,7 @@ int Game::onMsg(char *msg, int size)
                         case 9: onNotifyMsg(msgs); break;
                         }
                         t = clock() - t;
-                        printf("-------- Time to call %s : %f s -------\n", MSG_FUNCS[i], (float)t /CLOCKS_PER_SEC);
+                        printf("-------- Time to call %s : %f s -------\n", MSG_FUNCS[i], t/(float)CLOCKS_PER_SEC);
                     }
                 }
                 break;
