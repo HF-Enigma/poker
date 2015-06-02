@@ -28,27 +28,35 @@ public:
     // -1 for game over msg; 0 for unknown msg; 1 for sucess
     int  onMsg(char *msg, int size);
 
-    void onSeatMsg(char *msg);
+    void onSeatMsg(std::vector<char*> msg);
     void onGameOverMsg();
-    void onBlindMsg();
-    void onHoleCardsMsg();
-    void onInquireMsg();
-    void onFlopMsg();
-    void onTurnMsg();
-    void onRiverMsg();
-    void onShowndownMsg();
-    void onPotWinMsg();
-    void onNotifyMsg();
+    void onBlindMsg(std::vector<char*> msg);
+    void onHoleCardsMsg(std::vector<char*> msg);
+    void onInquireMsg(std::vector<char*> msg);
+    void onFlopMsg(std::vector<char*> msg);
+    void onTurnMsg(std::vector<char*> msg);
+    void onRiverMsg(std::vector<char*> msg);
+    void onShowndownMsg(std::vector<char*> msg);
+    void onPotWinMsg(std::vector<char*> msg);
+    void onNotifyMsg(std::vector<char*> msg);
+
+    Player *getPlayerById(int id);
 
 private:
     int gameSocket;
+
     int smallBlind;
     int bigBlind;
 
+    int pot;
+
     int button;
+
+    char *buffer, *buffer_start, *buffer_end;
 
     int numOfPlayers;
     std::vector<Player*> players;
+    Player *self;
 };
 
 #endif // GAME_H

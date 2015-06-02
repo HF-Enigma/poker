@@ -54,9 +54,13 @@ static Suit symbolToSuit(char symbol) //e.g. c to CLUBS
 {
     switch(symbol)
     {
+    case 'C':
     case 'c': return S_CLUBS;
+    case 'D':
     case 'd': return S_DIAMONDS;
+    case 'H':
     case 'h': return S_HEARTS;
+    case 'S':
     case 's': return S_SPADES;
     }
 
@@ -67,6 +71,7 @@ static int symbolToValue(char symbol) //e.g. T to 10, 5 to 5, A to 14
 {
     switch(symbol)
     {
+    case '1': return 10;
     case '2': return 2;
     case '3': return 3;
     case '4': return 4;
@@ -168,6 +173,14 @@ Card::Card(int value, Suit suit) :
 Card::Card(int index)
 {
     setIndex(index);
+}
+
+Card::Card(const char *suit, const char *value)
+{
+    int v = symbolToValue(*value);
+    Suit s = symbolToSuit(*suit);
+
+    setIndex( valueAndSuitToIndex(v, s) );
 }
 
 Card::Card(const std::string& shortName)

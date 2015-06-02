@@ -7,7 +7,7 @@
 class AI : public Player
 {
 public:
-    AI(std::string &name);
+    AI(int id, std::string &name);
 
     Action doTurn(Game &game);
 

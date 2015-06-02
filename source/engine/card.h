@@ -29,6 +29,7 @@ public:
     Card(); //makes invalid card
     Card(int value, Suit suit);
     Card(int index);
+    Card(const char *suit, const char *value);
     Card(const std::string& shortName); //e.g. "Qs"
     Card(const Card& other);
 

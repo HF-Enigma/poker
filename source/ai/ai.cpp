@@ -1,7 +1,7 @@
 #include "ai.h"
 
-AI::AI(std::string &name) :
-    Player(name)
+AI::AI(int id, std::string &name) :
+    Player(id, name)
 {
 
 }
@@ -9,6 +9,7 @@ AI::AI(std::string &name) :
 Action AI::doTurn(Game &game)
 {
     Action a;
+    a.command = ACTION_FOLD;
     return a;
 }
 

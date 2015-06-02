@@ -87,9 +87,10 @@ void communicate(int s, int player_id){
     g.sendRegMsg(player_id, PLAYER_NAME, true);
 
     // game loop
-    char buffer[1024];
+    int buffer_size = 1024*1;
+    char *buffer = new char[buffer_size];
     while(true){
-        int size = recv(s, buffer, sizeof(buffer), 0);
+        int size = recv(s, buffer, buffer_size, 0);
         if(size > 0){
             if (-1 == g.onMsg(buffer, size)){
                 break;
@@ -99,6 +100,8 @@ void communicate(int s, int player_id){
             perror("failed to recv packet");
         }
     }
+
+    delete[] buffer;
 }
 
 int main(int argc, char **argv){

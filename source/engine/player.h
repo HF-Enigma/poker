@@ -8,10 +8,11 @@
 
 enum ActionFlag
 {
+    ACTION_BLIND,
     ACTION_FOLD,
     ACTION_CHECK,
     ACTION_CALL,
-    ACTION_RAISE //also used to BET. Requires amount to be given, and amount must be amount of chips moved to table, not the amount raises with.
+    ACTION_RAISE // Requires amount to be given, and amount must be amount of chips moved to table, not the amount raises with.
 };
 
 struct Action
@@ -34,8 +35,9 @@ struct Action
 class Player
 {
 public:
-    Player();
-    Player(std::string &name);
+    Player(int id = 0);
+    Player(int id, const char *name);
+    Player(int id, std::string &name);
 
     const std::string& getName() const {return name;}
 
@@ -51,12 +53,23 @@ public:
     int getId() const;
     void setId(int value);
 
+    int getSeat() const;
+    void setSeat(int value);
+
+    std::vector<Card> getHoleCards() const;
+    void setHoleCards(const std::vector<Card> &value);
+
+    int getWager() const;
+    void setWager(int value);
+
 private:
     int id;
     std::string name; //name of the player
 
     bool folded;
     bool allin;
+
+    int seat; // 0 button, 1 small blind, 2 big blind, 3~7
 
     int money;
     int chips;

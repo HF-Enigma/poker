@@ -8,7 +8,20 @@ Check combination.h, statistics.h, info.h, util.h and game.h for a bit more poke
 */
 
 #include "card.h"
-#include "combination.h"
+
+enum ComboType
+{
+    C_HIGH_CARD,
+    C_PAIR,
+    C_TWO_PAIR,
+    C_THREE_OF_A_KIND,
+    C_STRAIGHT,
+    C_FLUSH,
+    C_FULL_HOUSE,
+    C_FOUR_OF_A_KIND,
+    C_STRAIGHT_FLUSH //includes royal flush
+};
+
 
 double factorial(int i); //note: only works if result fits in double
 double combination(int n, int p); //Binomial coefficient. Number of rows of p elements that can be made out of n elements, where order doesn't matter.
