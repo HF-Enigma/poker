@@ -477,7 +477,7 @@ void getWinChanceAgainstNAtPreFlop(double& win, double& tie, double& lose
 
     for(int i = 0; i < numSamples; i++)
     {
-        shuffleN(others, NUMOTHER, 2 + numOpponents * 2); //the two extra table cards, and the cards of all opponents
+        shuffleN(others, NUMOTHER, 5 + numOpponents * 2); //the five extra table cards, and the cards of all opponents
 
         c[2] = others[0];
         c[3] = others[1];
