@@ -5,8 +5,11 @@
 
 #include "player.h"
 
+const unsigned int DEFAULT_BUFFER_SIZE = 1024*2;
+
 enum Round
 {
+    ROUND_NONE,
     ROUND_PRE_FLOP,
     ROUND_FLOP,
     ROUND_TURN,
@@ -43,6 +46,28 @@ public:
 
     Player *getPlayerById(int id);
 
+    unsigned int getNumOfActivePlayers();
+
+    int getSmallBlind() const;
+    void setSmallBlind(int value);
+
+    int getBigBlind() const;
+    void setBigBlind(int value);
+
+    int getPot() const;
+    void setPot(int value);
+
+    Round getRound() const;
+    void setRound(const Round &value);
+
+    std::vector<Card> getDeckCards() const;
+    void setDeckCards(const std::vector<Card> &value);
+
+    int getAmountToCall() const;
+
+    int getMinToRaise() const;
+    void setMinToRaise(int value);
+
 private:
     int gameSocket;
 
@@ -50,10 +75,16 @@ private:
     int bigBlind;
 
     int pot;
+    int amountToCall;
+    int minToRaise;
 
     int button;
 
-    char *buffer, *buffer_start, *buffer_end;
+    Round round;
+
+    std::vector<Card> deckCards;
+
+    char *buffer, *buffer2, *buffer_end;
 
     int numOfPlayers;
     std::vector<Player*> players;

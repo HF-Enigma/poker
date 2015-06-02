@@ -2,7 +2,8 @@
 #define AI_H
 
 #include "engine/player.h"
-#include "engine/game.h"
+
+class Game;
 
 class AI : public Player
 {

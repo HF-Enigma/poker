@@ -512,8 +512,8 @@ void getWinChanceAgainstNAtPreFlop(double& win, double& tie, double& lose
 }
 
 void getWinChanceAgainstNAtFlop(double& win, double& tie, double& lose
-                                , const Card& hand1, const Card& hand2
-                                , const Card& table1, const Card& table2, const Card& table3
+                                , const std::vector<Card>& hands
+                                , const std::vector<Card>& table
                                 , int numOpponents, int numSamples)
 {
     win = tie = lose = 0.0;
@@ -521,11 +521,11 @@ void getWinChanceAgainstNAtFlop(double& win, double& tie, double& lose
     //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
     int c[9];
 
-    c[0] = eval7_index(hand1);
-    c[1] = eval7_index(hand2);
-    c[2] = eval7_index(table1);
-    c[3] = eval7_index(table2);
-    c[4] = eval7_index(table3);
+    c[0] = eval7_index(hands[0]);
+    c[1] = eval7_index(hands[1]);
+    c[2] = eval7_index(table[0]);
+    c[3] = eval7_index(table[1]);
+    c[4] = eval7_index(table[2]);
 
     static const int NUMOTHER = 47;
 
@@ -581,8 +581,8 @@ void getWinChanceAgainstNAtFlop(double& win, double& tie, double& lose
 }
 
 void getWinChanceAgainstNAtTurn(double& win, double& tie, double& lose
-                                , const Card& hand1, const Card& hand2
-                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4
+                                , const std::vector<Card>& hands
+                                , const std::vector<Card>& table
                                 , int numOpponents, int numSamples)
 {
     win = tie = lose = 0.0;
@@ -590,12 +590,12 @@ void getWinChanceAgainstNAtTurn(double& win, double& tie, double& lose
     //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
     int c[9];
 
-    c[0] = eval7_index(hand1);
-    c[1] = eval7_index(hand2);
-    c[2] = eval7_index(table1);
-    c[3] = eval7_index(table2);
-    c[4] = eval7_index(table3);
-    c[5] = eval7_index(table4);
+    c[0] = eval7_index(hands[0]);
+    c[1] = eval7_index(hands[1]);
+    c[2] = eval7_index(table[0]);
+    c[3] = eval7_index(table[1]);
+    c[4] = eval7_index(table[2]);
+    c[5] = eval7_index(table[3]);
 
     static const int NUMOTHER = 46;
 
@@ -650,8 +650,8 @@ void getWinChanceAgainstNAtTurn(double& win, double& tie, double& lose
 }
 
 void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
-                                 , const Card& hand1, const Card& hand2
-                                 , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
+                                 , const std::vector<Card>& hands
+                                 , const std::vector<Card>& table
                                  , int numOpponents, int numSamples)
 {
     win = tie = lose = 0.0;
@@ -659,13 +659,13 @@ void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
     //an array of 9 values, set up to contain your hand, the 5 table cards, and then the randomly generated players hand
     int c[9];
 
-    c[0] = eval7_index(hand1);
-    c[1] = eval7_index(hand2);
-    c[2] = eval7_index(table1);
-    c[3] = eval7_index(table2);
-    c[4] = eval7_index(table3);
-    c[5] = eval7_index(table4);
-    c[6] = eval7_index(table5);
+    c[0] = eval7_index(hands[0]);
+    c[1] = eval7_index(hands[1]);
+    c[2] = eval7_index(table[0]);
+    c[3] = eval7_index(table[1]);
+    c[4] = eval7_index(table[2]);
+    c[5] = eval7_index(table[3]);
+    c[6] = eval7_index(table[4]);
 
     static const int NUMOTHER = 45;
 
@@ -757,17 +757,17 @@ double getPotEquity(const std::vector<Card>& holeCards, const std::vector<Card>&
     }
     else if(boardCards.size() == 3) //flop
     {
-        getWinChanceAgainstNAtFlop(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], numOpponents, numSamples);
+        getWinChanceAgainstNAtFlop(win, tie, lose, holeCards, boardCards, numOpponents, numSamples);
     }
     else if(boardCards.size() == 4) //turn
     {
         if(numOpponents == 1) getWinChanceAgainst1AtTurn(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3]);
-        else getWinChanceAgainstNAtTurn(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], numOpponents, numSamples);
+        else getWinChanceAgainstNAtTurn(win, tie, lose, holeCards, boardCards, numOpponents, numSamples);
     }
     else if(boardCards.size() == 5) //river
     {
         if(numOpponents == 1) getWinChanceAgainst1AtRiver(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], boardCards[4]);
-        else getWinChanceAgainstNAtRiver(win, tie, lose, holeCards[0], holeCards[1], boardCards[0], boardCards[1], boardCards[2], boardCards[3], boardCards[4], numOpponents, numSamples);
+        else getWinChanceAgainstNAtRiver(win, tie, lose, holeCards, boardCards, numOpponents, numSamples);
     }
 
     double result = win;

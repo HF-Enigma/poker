@@ -150,18 +150,15 @@ void getWinChanceAgainstNAtPreFlop(double& win, double& tie, double& lose
 
 
 void getWinChanceAgainstNAtFlop(double& win, double& tie, double& lose
-                                , const Card& hand1, const Card& hand2
-                                , const Card& table1, const Card& table2, const Card& table3
+                                , const std::vector<Card> &hands, const std::vector<Card> &table
                                 , int numOpponents, int numSamples = 50000);
 
 void getWinChanceAgainstNAtTurn(double& win, double& tie, double& lose
-                                , const Card& hand1, const Card& hand2
-                                , const Card& table1, const Card& table2, const Card& table3, const Card& table4
+                                , const std::vector<Card> &hands, const std::vector<Card> &table
                                 , int numOpponents, int numSamples = 50000);
 
 void getWinChanceAgainstNAtRiver(double& win, double& tie, double& lose
-                                 , const Card& hand1, const Card& hand2
-                                 , const Card& table1, const Card& table2, const Card& table3, const Card& table4, const Card& table5
+                                 , const std::vector<Card> &hands, const std::vector<Card> &table
                                  , int numOpponents, int numSamples = 50000);
 
 #endif // POKERMATH_H

@@ -1,6 +1,4 @@
-#include <iostream>
 #include <cstring>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -83,39 +81,37 @@ bool createConnection(InputArgs &args, int &s){
 
 void communicate(int s, int player_id){
     // register
-    Game g(s, 8);
-    g.sendRegMsg(player_id, PLAYER_NAME, true);
+    Game *g = new Game(s, 8);
+    g->sendRegMsg(player_id, PLAYER_NAME, true);
 
     // game loop
-    int buffer_size = 1024*1;
-    char *buffer = new char[buffer_size];
+    char *buffer = new char[DEFAULT_BUFFER_SIZE/2];
     while(true){
-        int size = recv(s, buffer, buffer_size, 0);
+        int size = recv(s, buffer, DEFAULT_BUFFER_SIZE/2, 0);
         if(size > 0){
-            if (-1 == g.onMsg(buffer, size)){
+            if (g->onMsg(buffer, size) == -1){
                 break;
             }
         }
-        else if(-1 == size){
+        else if(size == -1){
             perror("failed to recv packet");
         }
     }
 
     delete[] buffer;
+    delete g;
 }
 
 int main(int argc, char **argv){
     // parse input arguments
     InputArgs args;
-
     if(!parseInputArgs(argc, argv, args)){
-        cout << "usage: game <server_ip> <server_port> <player_ip> <player_port> <player_id>\n";
+        printf("usage: game <server_ip> <server_port> <player_ip> <player_port> <player_id>\n");
         return -1;
     }
 
     // connect to server
     int client_socket;
-
     if(!createConnection(args, client_socket)){
         return -1;
     }

@@ -12,7 +12,8 @@ enum ActionFlag
     ACTION_FOLD,
     ACTION_CHECK,
     ACTION_CALL,
-    ACTION_RAISE // Requires amount to be given, and amount must be amount of chips moved to table, not the amount raises with.
+    ACTION_RAISE, // Requires amount to be given, and amount must be amount of chips moved to table, not the amount raises with.
+    ACTION_ALLIN,
 };
 
 struct Action
@@ -62,7 +63,9 @@ public:
     int getWager() const;
     void setWager(int value);
 
-private:
+    bool isActive() const {return !folded;}
+
+protected:
     int id;
     std::string name; //name of the player
 

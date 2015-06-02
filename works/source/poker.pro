@@ -12,20 +12,20 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-DESTDIR = ../works/target
+DESTDIR = ../game/works/target
 
 SOURCES += main.cpp \
+    ai/ai.cpp \
     engine/card.cpp \
     engine/pokermath.cpp \
     engine/pokereval.cpp \
-    ai/ai.cpp \
     engine/player.cpp \
     engine/game.cpp
 
 HEADERS += \
+    ai/ai.h \
     engine/card.h \
     engine/pokermath.h \
     engine/pokereval.h \
-    ai/ai.h \
     engine/player.h \
     engine/game.h

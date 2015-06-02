@@ -1,15 +1,16 @@
 #include "game.h"
 
+#include <iostream>
 #include <string>
 #include <cstring>
 #include <cstdio>
+#include <ctime>
+
 #include <sys/socket.h>
 #include <unistd.h>
 
 #include "player.h"
 #include "ai/ai.h"
-
-const unsigned int DEFAULT_BUFFER_SIZE = 1024*4;
 
 const char MSG_TAGS[10][2][16] = {
     {"seat/ ", "/seat "},
@@ -24,25 +25,36 @@ const char MSG_TAGS[10][2][16] = {
     {"notify/ ", "/notify "},
 };
 
+const char MSG_FUNCS[][32] = {
+    "onSeatMSg()",
+    "onBlindMSg()",
+    "onHoleMSg()",
+    "onInquireMSg()",
+    "onFlopMSg()",
+    "onTurnMSg()",
+    "onRiverMSg()",
+    "onShowdownMSg()",
+    "onPotWinMSg()",
+    "onNotifyMSg()",
+};
+
+
 Game::Game(int gameSocket, int numOfPlayers) :
     gameSocket(gameSocket),
+    amountToCall(0),
     numOfPlayers(numOfPlayers),
     self(NULL)
 {
     players.reserve(numOfPlayers);
 
     buffer = new char[DEFAULT_BUFFER_SIZE];
+    buffer2 = new char[DEFAULT_BUFFER_SIZE];
     memset(buffer, 0, DEFAULT_BUFFER_SIZE);
-    buffer_start = buffer;
     buffer_end = buffer;
 }
 
 Game::~Game()
 {
-    if(self){
-        delete self;
-    }
-
     for(size_t i=0; i<players.size(); ++i){
         delete players[i];
     }
@@ -50,6 +62,7 @@ Game::~Game()
     close(gameSocket);
 
     delete[] buffer;
+    delete[] buffer2;
 }
 
 bool Game::sendRegMsg(int playerID, const char *playerName, bool needNotify)
@@ -73,16 +86,19 @@ bool Game::sendActionMsg(const Action &a)
 
     switch(a.command){
     case ACTION_RAISE:
-        snprintf(msg, sizeof(msg) - 1, "raise %d \n", a.amount);
+        snprintf(msg, sizeof(msg), "raise %d \n", a.amount);
         break;
     case ACTION_FOLD:
-        snprintf(msg, sizeof(msg) - 1, "fold \n");
+        snprintf(msg, sizeof(msg), "fold \n");
         break;
     case ACTION_CHECK:
-        snprintf(msg, sizeof(msg) - 1, "check \n");
+        snprintf(msg, sizeof(msg), "check \n");
         break;
     case ACTION_CALL:
-        snprintf(msg, sizeof(msg) - 1, "call \n");
+        snprintf(msg, sizeof(msg), "call \n");
+        break;
+    case ACTION_ALLIN:
+        snprintf(msg, sizeof(msg), "all_in \n");
         break;
     default:
         break;
@@ -94,24 +110,28 @@ bool Game::sendActionMsg(const Action &a)
 int Game::onMsg(char *msg, int size)
 {
     //
-    memcpy(buffer_end+1, msg , size);
+    memcpy(buffer_end, msg , size);
     buffer_end += size;
 
     // split message
     std::vector<char*> strs;
-    buffer_start = buffer;
+    char *buffer_start = buffer;
 
-    int len = 0;
-    while(buffer_start <= buffer_end){
-        len = strlen(buffer_start);
-        if(len>0 && (buffer_start + (len-1)) <= buffer_end){
+    char *pch;
+    while(buffer_start < buffer_end){
+        pch = strpbrk(buffer_start, "\n");
+        if(pch && pch < buffer_end){
+            *pch = '\0';
             strs.push_back(buffer_start);
-            buffer_start += len+1;
+            printf("%s\n", buffer_start);
+            buffer_start = pch+1;
         }
         else{
             break;
         }
     }
+
+    printf("--------------------------------------------------\n");
 
     // handling messages
     while(strs.size() > 0){
@@ -127,6 +147,7 @@ int Game::onMsg(char *msg, int size)
                     if(strcmp(strs[j], MSG_TAGS[i][1]) == 0){
                         std::vector<char*> msgs(strs.begin(), strs.begin()+j+1);
                         strs.erase(strs.begin(), strs.begin()+j+1);
+                        clock_t t = clock();
                         switch(i){
                         case 0: onSeatMsg(msgs); break;
                         case 1: onBlindMsg(msgs); break;
@@ -139,11 +160,25 @@ int Game::onMsg(char *msg, int size)
                         case 8: onPotWinMsg(msgs); break;
                         case 9: onNotifyMsg(msgs); break;
                         }
+                        t = clock() - t;
+                        printf("-------- Time to call %s : %f s -------\n", MSG_FUNCS[i], (float)t /CLOCKS_PER_SEC);
                     }
                 }
                 break;
             }
         }
+    }
+
+    if(buffer_start >= buffer_end){
+        memset(buffer, 0, DEFAULT_BUFFER_SIZE);
+        buffer_start = buffer;
+        buffer_end = buffer;
+    }
+    else{
+        memcpy(buffer2, buffer_start, (buffer_end-buffer_start));
+        memset(buffer, 0, DEFAULT_BUFFER_SIZE);
+        memcpy(buffer, buffer2, (buffer_end-buffer_start));
+        buffer_end = buffer + (buffer_end-buffer_start);
     }
 
     return 0;
@@ -210,8 +245,8 @@ void Game::onInquireMsg(std::vector<char *> msg)
     }
 
     int pot= 0;
-    if(sscanf(msg[msg.size()-1], "%d", &pot) == 1){
-
+    if(sscanf(msg[msg.size()-1], "total pot: %d", &pot) == 1){
+        this->pot = pot;
     }
 
     Action a = self->doTurn(this);
@@ -259,4 +294,81 @@ Player *Game::getPlayerById(int id)
     Player *p = new Player(id);
     players.push_back(p);
     return p;
+}
+
+unsigned int Game::getNumOfActivePlayers()
+{
+    unsigned int c = 0;
+
+    for(size_t i=0; i<players.size(); ++i){
+        if(players[i]->isActive()){
+            ++c;
+        }
+    }
+    return c;
+}
+
+int Game::getSmallBlind() const
+{
+    return smallBlind;
+}
+
+void Game::setSmallBlind(int value)
+{
+    smallBlind = value;
+}
+
+int Game::getBigBlind() const
+{
+    return bigBlind;
+}
+
+void Game::setBigBlind(int value)
+{
+    bigBlind = value;
+}
+
+int Game::getPot() const
+{
+    return pot;
+}
+
+void Game::setPot(int value)
+{
+    pot = value;
+}
+
+Round Game::getRound() const
+{
+    return round;
+}
+
+void Game::setRound(const Round &value)
+{
+    round = value;
+}
+
+std::vector<Card> Game::getDeckCards() const
+{
+    return deckCards;
+}
+
+void Game::setDeckCards(const std::vector<Card> &value)
+{
+    deckCards = value;
+}
+
+int Game::getAmountToCall() const
+{
+    return amountToCall;
+}
+
+int Game::getMinToRaise() const
+{
+    return minToRaise;
+}
+
+void Game::setMinToRaise(int value)
+{
+    minToRaise = value;
 }
