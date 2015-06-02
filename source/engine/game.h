@@ -15,6 +15,7 @@ enum Round
 };
 
 class Player;
+class AI;
 
 class Game
 {
@@ -56,7 +57,7 @@ private:
 
     int numOfPlayers;
     std::vector<Player*> players;
-    Player *self;
+    AI *self;
 };
 
 #endif // GAME_H

@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "player.h"
+#include "ai/ai.h"
 
 const unsigned int DEFAULT_BUFFER_SIZE = 1024*4;
 
@@ -53,17 +54,41 @@ Game::~Game()
 
 bool Game::sendRegMsg(int playerID, const char *playerName, bool needNotify)
 {
-    self = new Player(playerID, playerName);
+    self = new AI(playerID, playerName);
     players.push_back(self);
 
-    char reg_msg[64];
+    char msg[64];
     if(needNotify){
-        snprintf(reg_msg, sizeof(reg_msg) - 1, "reg: %d %s need_notify \n", playerID, playerName);
+        snprintf(msg, sizeof(msg) - 1, "reg: %d %s need_notify \n", playerID, playerName);
     }
     else{
-        snprintf(reg_msg, sizeof(reg_msg) - 1, "reg: %d %s \n", playerID, playerName);
+        snprintf(msg, sizeof(msg) - 1, "reg: %d %s \n", playerID, playerName);
     }
-    return send(gameSocket, reg_msg, strlen(reg_msg) + 1, 0) != -1;
+    return send(gameSocket, msg, strlen(msg) + 1, 0) != -1;
+}
+
+bool Game::sendActionMsg(const Action &a)
+{
+    char msg[64];
+
+    switch(a.command){
+    case ACTION_RAISE:
+        snprintf(msg, sizeof(msg) - 1, "raise %d \n", a.amount);
+        break;
+    case ACTION_FOLD:
+        snprintf(msg, sizeof(msg) - 1, "fold \n");
+        break;
+    case ACTION_CHECK:
+        snprintf(msg, sizeof(msg) - 1, "check \n");
+        break;
+    case ACTION_CALL:
+        snprintf(msg, sizeof(msg) - 1, "call \n");
+        break;
+    default:
+        break;
+    }
+
+    return send(gameSocket, msg, strlen(msg) + 1, 0) != -1;
 }
 
 int Game::onMsg(char *msg, int size)
@@ -183,6 +208,14 @@ void Game::onInquireMsg(std::vector<char *> msg)
             p->setWager(bet);
         }
     }
+
+    int pot= 0;
+    if(sscanf(msg[msg.size()-1], "%d", &pot) == 1){
+
+    }
+
+    Action a = self->doTurn(this);
+    sendActionMsg(a);
 }
 
 void Game::onFlopMsg(std::vector<char *> msg)

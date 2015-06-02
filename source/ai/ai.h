@@ -7,9 +7,10 @@
 class AI : public Player
 {
 public:
+    AI(int id, const char *name);
     AI(int id, std::string &name);
 
-    Action doTurn(Game &game);
+    Action doTurn(Game *game);
 
 private:
     double tightness; // loosest 0 ~ 1.0 tightest

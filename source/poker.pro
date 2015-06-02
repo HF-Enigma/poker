@@ -12,7 +12,7 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-DESTDIR = ./game/target
+DESTDIR = ../works/target
 
 SOURCES += main.cpp \
     engine/card.cpp \
