@@ -62,7 +62,7 @@ do
   export "PLAYER"$i"_ID"=$i$i$i$i
 done
 chmod u+x gameserver
-./gameserver -gip 127.0.0.1 -seq replay -r 30 -d 1 -m 10000 -b 50 -t 2000 -h 500 0</dev/null 1>/dev/null 2>/dev/null  & 
+./gameserver -gip 127.0.0.1 -seq replay -r 30 -d 1 -m 10000 -b 50 -t 2000 -h 1000 0</dev/null 1>/dev/null 2>/dev/null  & 
 popd >/dev/null
 
 echo "start players"
@@ -79,10 +79,10 @@ echo "start playmates"
 ./raise1   127.0.0.1 6000 127.0.0.5 6005 5555 0</dev/null 1>/dev/null 2>/dev/null &
 ./raise100 127.0.0.1 6000 127.0.0.6 6006 6666 0</dev/null 1>/dev/null 2>/dev/null &
 ./random   127.0.0.1 6000 127.0.0.7 6007 7777 0</dev/null 1>/dev/null 2>/dev/null &
-./game     127.0.0.1 6000 127.0.0.8 6008 8888 0</dev/null 1>./stdout 2>./stderror &
 
 echo "start your game"
 #./game 127.0.0.1 6000 127.0.0.8 6008 8888
+./game     127.0.0.1 6000 127.0.0.8 6008 8888 0</dev/null 1>./stdout 2>./stderr &
 #gdb ./game -ex "r 127.0.0.1 6000 127.0.0.8 6008 8888"
 
 popd >/dev/null

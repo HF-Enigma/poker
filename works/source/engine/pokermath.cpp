@@ -81,12 +81,11 @@ int getSklanskyMalmuthGroup(const Card& card1, const Card& card2)
 
     if(!card1.isValid() || !card2.isValid()) return 9;
 
-    static const int table[169] =
+    static const int table[169] = {
             //    A  K  Q  J  T  9  8  7  6  5  4  3  2
-    {
-            /*A*/ 1, 1, 2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+            /*A*/ 1, 1, 2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, //<suited
             /*K*/ 2, 1, 2, 3, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-            /*Q*/ 3, 4, 1, 3, 4, 5, 7, 9, 9, 9, 9, 9, 9, //<suited
+            /*Q*/ 3, 4, 1, 3, 4, 5, 7, 9, 9, 9, 9, 9, 9,
             /*J*/ 4, 5, 5, 1, 3, 4, 6, 8, 9, 9, 9, 9, 9,
             /*T*/ 6, 6, 6, 5, 2, 4, 5, 7, 9, 9, 9, 9, 9,
             /*9*/ 8, 8, 8, 7, 7, 3, 4, 5, 8, 9, 9, 9, 9,
@@ -97,7 +96,7 @@ int getSklanskyMalmuthGroup(const Card& card1, const Card& card2)
             /*4*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 7, 8,
             /*3*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 8,
             /*2*/ 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7
-};      //^offsuit
+    };      //^offsuit
 
     size_t index1 = 14 - card1.value;
     size_t index2 = 14 - card2.value;

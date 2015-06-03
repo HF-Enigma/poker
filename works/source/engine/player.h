@@ -40,7 +40,11 @@ public:
     Player(int id, const char *name);
     Player(int id, std::string &name);
 
-    const std::string& getName() const {return name;}
+    std::string getName() const;
+    void setName(const std::string &value);
+
+    int getId() const;
+    void setId(int value);
 
     int getMoney() const;
     void setMoney(int value);
@@ -50,9 +54,6 @@ public:
 
     Action getLastAction() const;
     void setLastAction(const Action &value);
-
-    int getId() const;
-    void setId(int value);
 
     int getSeat() const;
     void setSeat(int value);

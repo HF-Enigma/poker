@@ -118,6 +118,9 @@ int main(int argc, char **argv){
         return -1;
     }
 
+    // unbuffer stdout
+    setbuf(stdout, NULL);
+
     // initialize
     clock_t t = clock();
     PokerEval::InitializeHandRankingTables();

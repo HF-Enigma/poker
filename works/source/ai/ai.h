@@ -8,6 +8,7 @@ class Game;
 class AI : public Player
 {
 public:
+    AI();
     AI(int id, const char *name);
     AI(int id, std::string &name);
 

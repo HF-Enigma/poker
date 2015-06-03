@@ -44,10 +44,13 @@ Game::Game(int gameSocket, int numOfPlayers) :
     pot(0),
     amountToCall(0),
     minToRaise(0),
-    round(ROUND_NONE),
-    self(NULL)
+    round(ROUND_NONE)
 {
     players.reserve(numOfPlayers);
+
+    self = new AI();
+    self->setTightness(0.75);
+    players.push_back(self);
 
     buffer = new char[DEFAULT_BUFFER_SIZE];
     buffer2 = new char[DEFAULT_BUFFER_SIZE];
@@ -69,9 +72,8 @@ Game::~Game()
 
 bool Game::sendRegMsg(int playerID, const char *playerName, bool needNotify)
 {
-    self = new AI(playerID, playerName);
-    self->setTightness(0.75);
-    players.push_back(self);
+    self->setId(playerID);
+    self->setName(std::string(playerName));
 
     char msg[64];
     if(needNotify){
@@ -253,7 +255,7 @@ void Game::onHoleCardsMsg(std::vector<char *> msg)
     char color[16], point[4];
 
     std::vector<Card> holeCards;
-    for (size_t i=1; i<msg.size(); ++i) {
+    for (size_t i=1; i<msg.size()-1; ++i) {
         if(sscanf(msg[i], "%s %s ", color, point) == 2){
             holeCards.push_back(Card(color, point));
             printf("Hole card : color %s point %s\n", color, point);
@@ -290,17 +292,43 @@ void Game::onInquireMsg(std::vector<char *> msg)
 
 void Game::onFlopMsg(std::vector<char *> msg)
 {
+    char color[16], point[4];
+
+    for (size_t i=1; i<msg.size()-1; ++i) {
+        if(sscanf(msg[i], "%s %s ", color, point) == 2){
+            deckCards.push_back(Card(color, point));
+            printf("Deck card : color %s point %s\n", color, point);
+        }
+    }
 
     this->round = ROUND_FLOP;
 }
 
 void Game::onTurnMsg(std::vector<char *> msg)
 {
+    char color[16], point[4];
+
+    for (size_t i=1; i<msg.size()-1; ++i) {
+        if(sscanf(msg[i], "%s %s ", color, point) == 2){
+            deckCards.push_back(Card(color, point));
+            printf("Deck card : color %s point %s\n", color, point);
+        }
+    }
+
     this->round = ROUND_TURN;
 }
 
 void Game::onRiverMsg(std::vector<char *> msg)
 {
+    char color[16], point[4];
+
+    for (size_t i=1; i<msg.size()-1; ++i) {
+        if(sscanf(msg[i], "%s %s ", color, point) == 2){
+            deckCards.push_back(Card(color, point));
+            printf("Deck card : color %s point %s\n", color, point);
+        }
+    }
+
     this->round = ROUND_RIVER;
 }
 

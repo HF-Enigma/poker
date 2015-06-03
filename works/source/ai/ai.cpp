@@ -9,6 +9,11 @@ double randomD(){
     return rand()/(double)RAND_MAX;
 }
 
+AI::AI() :
+    Player()
+{
+}
+
 AI::AI(int id, const char *name) :
     Player(id, name)
 {
@@ -17,11 +22,11 @@ AI::AI(int id, const char *name) :
 AI::AI(int id, std::string &name) :
     Player(id, name)
 {
-
 }
 
 Action AI::doTurn(Game *game)
 {
+    printf("AI thinking ................................\n");
     double raiseChance = 0.0;
     double allInChance = 0.0;
     int maxWager = 0;
@@ -31,10 +36,11 @@ Action AI::doTurn(Game *game)
     Round r = game->getRound();
 
     if(r == ROUND_NONE){
-        printf("Invalid round, some thing is wrong\n");
+        fprintf(stderr, "Invalid round, some thing is wrong\n");
     }
     else if(r == ROUND_PRE_FLOP)
     {
+        printf("AI getSklanskyMalmuthGroup ................................\n");
         int group = getSklanskyMalmuthGroup(holeCards[0], holeCards[1]);
         if(group == 9) maxWager = 0;
         else if(group == 8 || group == 7) maxWager = bb;
@@ -58,16 +64,26 @@ Action AI::doTurn(Game *game)
     }
     else
     {
-        double win, tie, lose;
+        double win = 0.0, tie = 0.0, lose = 0.0;
         int num_opponents = game->getNumOfActivePlayers() - 1;
 
+        printf("AI getWinChance ................................\n");
         if(r == ROUND_FLOP){
+            if(game->getDeckCards().size() != 3){
+                fprintf(stderr, "Invalid deck, some thing is wrong\n");
+            }
             getWinChanceAgainstNAtFlop(win, tie, lose, holeCards, game->getDeckCards(), num_opponents);
         }
         else if(r == ROUND_TURN){
+            if(game->getDeckCards().size() != 4){
+                fprintf(stderr, "Invalid deck, some thing is wrong\n");
+            }
             getWinChanceAgainstNAtTurn(win, tie, lose, holeCards, game->getDeckCards(), num_opponents);
         }
         else if(r == ROUND_RIVER){
+            if(game->getDeckCards().size() != 5){
+                fprintf(stderr, "Invalid deck, some thing is wrong\n");
+            }
             getWinChanceAgainstNAtRiver(win, tie, lose, holeCards, game->getDeckCards(), num_opponents);
         }
 
@@ -95,20 +111,24 @@ Action AI::doTurn(Game *game)
         }
     }
 
+    printf("AI action ................................\n");
+
     Action a;
+    a.command = ACTION_FOLD;
+
+    try{
 
     int minWagerTotal = game->getAmountToCall();
-    if(minWagerTotal > this->chips) minWagerTotal = this->chips;
 
-    if(minWagerTotal > maxWager)
-    {
-        a.command = ACTION_FOLD;
-        return a;
+    if(minWagerTotal > this->chips){
+        minWagerTotal = this->chips;
     }
-    else
-    {
-        if(randomD() < raiseChance)
-        {
+
+    if(minWagerTotal > maxWager) {
+        a.command = ACTION_FOLD;
+    }
+    else {
+        if(randomD() < raiseChance) {
             int amount = (int)(game->getMinToRaise() * (1.0 + randomD()));
 
             //round the amount to become a multiple of big blinds
@@ -117,21 +137,21 @@ Action AI::doTurn(Game *game)
 
             a.command = ACTION_RAISE;
             a.amount = amount;
-            return a;
         }
-        else if(randomD() < allInChance)
-        {
+        else if(randomD() < allInChance) {
             a.command = ACTION_ALLIN;
-            return a;
         }
-        else
-        {
+        else {
             a.command = ACTION_CALL;
-            return a;
         }
     }
 
-    a.command = ACTION_FOLD;
+    printf("AI done ................................\n");
+
+    } catch(...){
+        printf("Exception when AI doing action\n");
+    }
+
     return a;
 }
 

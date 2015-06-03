@@ -39,6 +39,26 @@ Player::Player(int id, std::string &name) :
 {
 }
 
+std::string Player::getName() const
+{
+    return name;
+}
+
+void Player::setName(const std::string &value)
+{
+    name = value;
+}
+
+int Player::getId() const
+{
+    return id;
+}
+
+void Player::setId(int value)
+{
+    id = value;
+}
+
 int Player::getMoney() const
 {
     return money;
@@ -70,15 +90,6 @@ void Player::setLastAction(const Action &value)
     lastAction = value;
 }
 
-int Player::getId() const
-{
-    return id;
-}
-
-void Player::setId(int value)
-{
-    id = value;
-}
 int Player::getSeat() const
 {
     return seat;
@@ -106,13 +117,4 @@ void Player::setWager(int value)
 {
     wager = value;
 }
-
-
-
-
-
-
-
-
-
 
