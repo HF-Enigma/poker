@@ -1,5 +1,7 @@
 #include "ai.h"
 
+#include <cstdio>
+
 #include "engine/game.h"
 #include "engine/pokermath.h"
 
@@ -28,7 +30,10 @@ Action AI::doTurn(Game *game)
 
     Round r = game->getRound();
 
-    if(r == ROUND_PRE_FLOP)
+    if(r == ROUND_NONE){
+        printf("Invalid round, some thing is wrong\n");
+    }
+    else if(r == ROUND_PRE_FLOP)
     {
         int group = getSklanskyMalmuthGroup(holeCards[0], holeCards[1]);
         if(group == 9) maxWager = 0;
@@ -55,6 +60,7 @@ Action AI::doTurn(Game *game)
     {
         double win, tie, lose;
         int num_opponents = game->getNumOfActivePlayers() - 1;
+
         if(r == ROUND_FLOP){
             getWinChanceAgainstNAtFlop(win, tie, lose, holeCards, game->getDeckCards(), num_opponents);
         }
@@ -128,4 +134,15 @@ Action AI::doTurn(Game *game)
     a.command = ACTION_FOLD;
     return a;
 }
+
+double AI::getTightness() const
+{
+    return tightness;
+}
+
+void AI::setTightness(double value)
+{
+    tightness = value;
+}
+
 

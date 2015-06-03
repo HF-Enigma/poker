@@ -82,9 +82,11 @@ bool createConnection(InputArgs &args, int &s){
 }
 
 void communicate(int s, int player_id){
+    try {
+
     // register
     Game *g = new Game(s, 8);
-    g->sendRegMsg(player_id, PLAYER_NAME, true);
+    g->sendRegMsg(player_id, PLAYER_NAME, false);
 
     // game loop
     char *buffer = new char[DEFAULT_BUFFER_SIZE/2];
@@ -102,6 +104,10 @@ void communicate(int s, int player_id){
 
     delete[] buffer;
     delete g;
+
+    } catch (...) {
+        fprintf(stderr, "Exception when calling Game::onMsg()\n");
+    }
 }
 
 int main(int argc, char **argv){

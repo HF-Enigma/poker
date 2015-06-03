@@ -14,7 +14,6 @@ enum Round
     ROUND_FLOP,
     ROUND_TURN,
     ROUND_RIVER,
-    ROUND_SHOWDOWN
 };
 
 class Player;
@@ -86,7 +85,6 @@ private:
 
     char *buffer, *buffer2, *buffer_end;
 
-    int numOfPlayers;
     std::vector<Player*> players;
     AI *self;
 };

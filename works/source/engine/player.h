@@ -8,7 +8,7 @@
 
 enum ActionFlag
 {
-    ACTION_BLIND,
+    ACTION_NONE,
     ACTION_FOLD,
     ACTION_CHECK,
     ACTION_CALL,
@@ -82,7 +82,6 @@ protected:
 
     Action lastAction; //what the player did this turn (most recent action of this player)
 
-    bool showdown; //if true, the hand card values of this player are stored in the holeCard variables.
     std::vector<Card> holeCards;
 
     // statistics

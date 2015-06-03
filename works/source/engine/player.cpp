@@ -4,7 +4,12 @@ Player::Player(int id) :
     id(id),
     name("unknown"),
     folded(false),
-    allin(false)
+    allin(false),
+    seat(-1),
+    money(-1),
+    chips(-1),
+    wager(-1),
+    lastAction(ACTION_NONE)
 {
 }
 
@@ -12,7 +17,12 @@ Player::Player(int id, const char *name) :
     id(id),
     name(name),
     folded(false),
-    allin(false)
+    allin(false),
+    seat(-1),
+    money(-1),
+    chips(-1),
+    wager(-1),
+    lastAction(ACTION_NONE)
 {
 }
 
@@ -20,7 +30,12 @@ Player::Player(int id, std::string &name) :
     id(id),
     name(name),
     folded(false),
-    allin(false)
+    allin(false),
+    seat(-1),
+    money(-1),
+    chips(-1),
+    wager(-1),
+    lastAction(ACTION_NONE)
 {
 }
 

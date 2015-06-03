@@ -41,8 +41,10 @@ const char MSG_FUNCS[][32] = {
 
 Game::Game(int gameSocket, int numOfPlayers) :
     gameSocket(gameSocket),
+    pot(0),
     amountToCall(0),
-    numOfPlayers(numOfPlayers),
+    minToRaise(0),
+    round(ROUND_NONE),
     self(NULL)
 {
     players.reserve(numOfPlayers);
@@ -68,6 +70,7 @@ Game::~Game()
 bool Game::sendRegMsg(int playerID, const char *playerName, bool needNotify)
 {
     self = new AI(playerID, playerName);
+    self->setTightness(0.75);
     players.push_back(self);
 
     char msg[64];
@@ -140,11 +143,14 @@ int Game::onMsg(char *msg, int size)
             return -1;
         }
 
+        bool match_start_tag = false, match_end_tag = false;
         // match message tags
         for(int i=0; i<10; ++i){
             if(strcmp(strs[0], MSG_TAGS[i][0]) == 0){
+                match_start_tag = true;
                 for(size_t j=1; j< strs.size(); ++j){
                     if(strcmp(strs[j], MSG_TAGS[i][1]) == 0){
+                        match_end_tag = true;
                         std::vector<char*> msgs(strs.begin(), strs.begin()+j+1);
                         strs.erase(strs.begin(), strs.begin()+j+1);
                         clock_t t = clock();
@@ -159,13 +165,28 @@ int Game::onMsg(char *msg, int size)
                         case 7: onShowndownMsg(msgs); break;
                         case 8: onPotWinMsg(msgs); break;
                         case 9: onNotifyMsg(msgs); break;
+                        default:
+                            fprintf(stderr, "Invalid msg tag index %d\n", i);
+                            break;
                         }
+
                         t = clock() - t;
                         printf("-------- Time to call %s : %f s -------\n", MSG_FUNCS[i], t/(float)CLOCKS_PER_SEC);
+
+                        break;
                     }
                 }
                 break;
             }
+        }
+        if(!match_start_tag){
+            fprintf(stderr, "Invalid msg line: %s\n", strs[0]);
+        }
+
+        if(!match_end_tag){
+            fprintf(stderr, "No matching msg tag for: %s\n", strs[0]);
+            buffer_start = strs[0];
+            break;
         }
     }
 
@@ -196,7 +217,18 @@ void Game::onSeatMsg(std::vector<char *> msg)
             p->setChips(jetton);
             p->setMoney(money);
         }
+        else if(sscanf(msg[i], "%d %d %d", &pid, &jetton, &money) == 3){
+            p = getPlayerById(pid);
+            p->setSeat(i-1);
+            p->setChips(jetton);
+            p->setMoney(money);
+        }
     }
+
+    // clear game info
+    deckCards.clear();
+    pot = 0;
+    this->round = ROUND_NONE;
 }
 
 void Game::onGameOverMsg()
@@ -224,9 +256,12 @@ void Game::onHoleCardsMsg(std::vector<char *> msg)
     for (size_t i=1; i<msg.size(); ++i) {
         if(sscanf(msg[i], "%s %s ", color, point) == 2){
             holeCards.push_back(Card(color, point));
+            printf("Hole card : color %s point %s\n", color, point);
         }
     }
     self->setHoleCards(holeCards);
+
+    this->round = ROUND_PRE_FLOP;
 }
 
 void Game::onInquireMsg(std::vector<char *> msg)
@@ -256,21 +291,22 @@ void Game::onInquireMsg(std::vector<char *> msg)
 void Game::onFlopMsg(std::vector<char *> msg)
 {
 
+    this->round = ROUND_FLOP;
 }
 
 void Game::onTurnMsg(std::vector<char *> msg)
 {
-
+    this->round = ROUND_TURN;
 }
 
 void Game::onRiverMsg(std::vector<char *> msg)
 {
-
+    this->round = ROUND_RIVER;
 }
 
 void Game::onShowndownMsg(std::vector<char *> msg)
 {
-
+    this->round = ROUND_NONE;
 }
 
 void Game::onPotWinMsg(std::vector<char *> msg)
@@ -292,6 +328,7 @@ Player *Game::getPlayerById(int id)
     }
 
     Player *p = new Player(id);
+    printf("Created a player, ID: %d\n", id);
     players.push_back(p);
     return p;
 }
