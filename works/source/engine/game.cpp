@@ -246,6 +246,12 @@ void Game::onBlindMsg(std::vector<char *> msg)
         if(sscanf(msg[i], "%d: %d ", &pid, &bet) == 2){
             p = getPlayerById(pid);
             p->setChips(p->getChips() - bet);
+            if(i == 1){
+                this->smallBlind = bet;
+            }
+            else if(i == 2){
+                this->bigBlind = bet;
+            }
         }
     }
 }

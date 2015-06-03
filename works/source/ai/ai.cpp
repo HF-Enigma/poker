@@ -31,7 +31,7 @@ Action AI::doTurn(Game *game)
     double allInChance = 0.0;
     int maxWager = 0;
 
-    int bb = game->getBigBlind();
+    int blind = game->getSmallBlind();
 
     Round r = game->getRound();
 
@@ -43,10 +43,10 @@ Action AI::doTurn(Game *game)
         printf("AI getSklanskyMalmuthGroup ................................\n");
         int group = getSklanskyMalmuthGroup(holeCards[0], holeCards[1]);
         if(group == 9) maxWager = 0;
-        else if(group == 8 || group == 7) maxWager = bb;
+        else if(group == 8 || group == 7) maxWager = blind*2;
         else if(group == 6 || group == 5)
         {
-            maxWager = bb * 4;
+            maxWager = blind * 4;
             raiseChance = 0.2;
         }
         else if(group == 4 || group == 3)
@@ -116,8 +116,6 @@ Action AI::doTurn(Game *game)
     Action a;
     a.command = ACTION_FOLD;
 
-    try{
-
     int minWagerTotal = game->getAmountToCall();
 
     if(minWagerTotal > this->chips){
@@ -131,9 +129,14 @@ Action AI::doTurn(Game *game)
         if(randomD() < raiseChance) {
             int amount = (int)(game->getMinToRaise() * (1.0 + randomD()));
 
-            //round the amount to become a multiple of big blinds
-            amount = (amount / bb) * bb;
-            if(amount == 0) amount = game->getMinToRaise();
+            //round the amount to become a multiple of small blinds
+            if(blind == 0){
+                printf("SmallBilind is 0\n");
+            }
+            else{
+                amount = (amount / blind) * blind;
+                if(amount == 0) amount = game->getMinToRaise();
+            }
 
             a.command = ACTION_RAISE;
             a.amount = amount;
@@ -147,10 +150,6 @@ Action AI::doTurn(Game *game)
     }
 
     printf("AI done ................................\n");
-
-    } catch(...){
-        printf("Exception when AI doing action\n");
-    }
 
     return a;
 }
